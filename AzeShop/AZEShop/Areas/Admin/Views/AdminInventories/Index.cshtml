@@ -1,0 +1,128 @@
+﻿@model IEnumerable<AzeShop.Models.Inventory>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách biên lai</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách báo cáo thống kê</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-affix m-b-10">
+                            <i class="prefix-icon anticon anticon-search"></i>
+                            <input type="text" class="form-control" id="mySearchBox" placeholder="Tìm kiếm báo cáo thống kê">
+                        </div>
+                    </div>
+
+                    <div class="col-md-0.5">
+                        <button id="export-button" class="btn btn-default m-r-5">
+                            <i class="fas fa-file-excel-o"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <table id="data-table" class="table table-hover e-commerce-table">
+            <thead>
+                <tr>
+                    <th>Tháng/Năm</th>
+                    <th>Sản phẩm</th>
+                    <th>Đã nhập</th>
+                    <th>Tổng tiền nhập</th>
+                    <th>Đã bán</th>
+                    <th>Tổng tiền bán</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MonthAndYear</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-image" style="height: 70px; width: 70px;">
+                                        <img src="~/images/products/@item.Product.Thumb" alt="">
+                                    </div>
+                                    <h6 class="m-b-0 m-l-10">
+                                        <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">@item.Product.ProductName</a>
+                                    </h6>
+                                </div>
+                            </td>
+                            <td>@item.ImportAmount</td>
+                            <td>@String.Format("{0:0,0}",item.ImportMoney) VNĐ</td>
+                            <td>@item.ExportAmount</td>
+                            <td>@String.Format("{0:0,0}",item.ExportMoney) VNĐ</td>
+
+
+                            
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+
+
+
+
+
+
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        $('#Inventory').addClass('active');
+    </script>
+    <script>
+        $("#data-table").dataTable({
+            destroy: true,
+            bFilter: true,
+            searching: true,
+            "sDom": "ltipr",
+            "bLengthChange": false,
+        });
+        $('#mySearchBox').on('keyup', function () {
+            $('#data-table').DataTable().search(this.value).draw();
+        });
+
+    </script>
+
+    <script>
+        $("#export-button").click(function () {
+            html_table_to_excel('xlsx');
+        });
+        function html_table_to_excel(type) {
+            var data = document.getElementById('data-table');
+            var file = XLSX.utils.table_to_book(data, { sheet: "sheet1" });
+
+            XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+            XLSX.writeFile(file, 'BaoCao.' + type);
+        }
+    </script>
+             }         

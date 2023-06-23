@@ -1,0 +1,320 @@
+﻿@model AzeShop.ModelViews.CheckoutModel
+@{
+    ViewData["Title"] = "Mua hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<AzeShop.ModelViews.CartItem> lsItem = ViewBag.GioHang;
+}
+
+
+    <!--====== Section 1 ======-->
+    <div class="u-s-p-y-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="breadcrumb">
+                    <div class="breadcrumb__wrap">
+                        <ul class="breadcrumb__list">
+                            <li class="has-separator">
+
+                                <a href="home">Trang chủ</a>
+                            </li>
+                            <li class="is-marked">
+                                <a href="checkout">Thanh toán</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Section 1 ======-->
+    <!--====== Section 2 ======-->
+    <div class="u-s-p-b-60">
+
+        <!--====== Section Content ======-->
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 2 ======-->
+    <!--====== Section 3 ======-->
+    <div class="u-s-p-b-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <form id="form-validation" method="post">
+                    <div class="checkout-f">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h1 class="checkout-f__h1">THÔNG TIN GIAO HÀNG</h1>
+                                <div class="checkout-f__delivery">
+                                    <div class="u-s-m-b-30">
+                                        <!--====== First Name, Last Name ======-->
+                                        <div class="gl-inline">
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="billing-fname">HỌ TÊN NGƯỜI NHẬN *</label>
+                                                @Html.TextBoxFor(m => m.FullName, new {placeholder = "Họ tên người nhận hàng", @class = "input-text input-text--primary-style" })
+                                            </div>
+                                        </div>
+                                        <!--====== End - First Name, Last Name ======-->
+                                        <!--====== PHONE ======-->
+                                        <div class="u-s-m-b-15">
+
+                                            <label class="gl-label" for="billing-phone">SỐ ĐIỆN THOẠI *</label>
+
+                                            @Html.TextBoxFor(m => m.Phone, new {placeholder = "Số điện thoại", @class = "input-text input-text--primary-style" })
+                                        </div>
+                                        <!--====== End - PHONE ======-->
+                                        <!--====== Street Address ======-->
+                                        <div class="u-s-m-b-15">
+
+                                            <label class="gl-label" for="billing-street">ĐỊA CHỈ *</label>
+
+                                            @Html.TextBoxFor(m => m.Address, new {placeholder = "Địa chỉ giao hàng", @class = "input-text input-text--primary-style" })
+                                        </div>
+                                        <!--====== End - Street Address ======-->
+                                        <!--====== Country ======-->
+                                        <div class="gl-inline">
+                                            <div class="u-s-m-b-10">
+                                                <label class="gl-label" for="billing-country">TỈNH / THÀNH PHỐ *</label>
+                                                @Html.DropDownListFor(m => m.City,ViewBag.City as SelectList,"Chọn tỉnh / thành",new { @class = "select-box select-box--primary-style"})
+                                            </div>
+                                            <div class="u-s-m-b-10">
+                                                <label class="gl-label" for="District">QUẬN / HUYỆN  *</label>
+                                                <select class="select-box select-box--primary-style" asp-for="District" asp-items="ViewBag.District">
+                                                    <option value="">Chọn quận / huyện</option>
+                                                </select>
+                                            </div>
+                                            <div class="u-s-m-b-10">
+                                                <label class="gl-label" for="Ward">PHƯỜNG / XÃ *</label>
+                                                <select class="select-box select-box--primary-style" asp-for="Ward" asp-items="ViewBag.Ward">
+                                                    <option value="">Chọn phường / xã</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--====== End - Country ======-->
+                                        <div class="u-s-m-b-10">
+
+                                            <label class="gl-label" for="order-note">GHI CHÚ</label>
+                                            <textarea class="text-area text-area--primary-style" asp-for="Note"></textarea>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h1 class="checkout-f__h1">SẢN PHẨM</h1>
+                                <!--====== Order Summary ======-->
+                                <div class="o-summary">
+                                    <div class="o-summary__section u-s-m-b-30">
+                                        <div class="o-summary__item-wrap gl-scroll">
+                                            @foreach (var item in lsItem)
+                                            {
+                                                <div class="o-card">
+                                                    <div class="o-card__flex">
+                                                        <div class="o-card__img-wrap">
+
+                                                            <img class="u-img-fluid" src="~/images/products/@item.product.Thumb" alt="">
+                                                        </div>
+                                                        <div class="o-card__info-wrap">
+
+                                                            <span class="o-card__name">
+
+                                                            <a href="/products/@item.product.Alias-@item.product.ProductId">@item.product.ProductName</a>
+                                                            </span>
+
+                                                            <span class="o-card__quantity">Số lượng x @item.quantity</span>
+
+                                                            <span class="o-card__price">
+                                                                @String.Format("{0:0,0}",(100 - item.product.Discount) * item.product.Price * item.quantity /100 ) VNĐ
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div class="o-summary__section u-s-m-b-30">
+                                        <div class="o-summary__box">
+                                            <table class="o-summary__table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>TIỀN HÀNG</td>
+                                                        <td id="products-price">
+                                                            @String.Format("{0:0,0}",lsItem.Sum(x => x.product.Price * x.quantity)) VNĐ
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>ĐƯỢC GIẢM</td>
+                                                        <td id="discount-price">
+                                                            @String.Format("{0:0,0}",lsItem.Sum(x => x.product.Discount * x.product.Price * x.quantity/100)) VNĐ
+                                                        </td>
+                                                    </tr>
+                                                <tr>
+                                                    <td>TIỀN SHIP</td>
+                                                    <td id="delivery-price">
+                                                        
+                                                    </td>
+                                                </tr>
+                                                    <tr>
+                                                        <td>THÀNH TIỀN</td>
+                                                        <td id="total-price">
+                                                            @String.Format("{0:0,0}",lsItem.Sum(x => (100-x.product.Discount) * x.product.Price /100 * x.quantity  )) VNĐ
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <br />
+                                            <div class="checkout-f__payment">
+                                                <div>
+                                                    <button class="btn btn--e-brand-b-2">ĐẶT HÀNG</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--====== End - Order Summary ======-->
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 3 ======-->
+
+
+@section Scripts
+    {
+    <style>
+        div .is-invalid {
+            color: red;
+        }
+    </style>
+
+    <script src="~/AdminAssets/vendors/jquery-validation/jquery.validate.min.js"></script>
+    <script>
+        jQuery.validator.addMethod('PhoneValidate', function (value, element) {
+            if (/^\d{3}-?\d{3}-?\d{4}$/g.test(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'p',
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                FullName: {
+                    required: true,
+                },
+                Phone: {
+                    required: true,
+                    PhoneValidate: true,
+                },
+                Address: {
+                    required: true,
+                },
+                City: {
+                    required: true
+                },
+                District: {
+                    required: true
+                },
+                Ward: {
+                    required: true
+                }
+            },
+            messages: {
+                FullName: {
+                    required: "Vui lòng nhập họ tên người nhận",
+                },
+                Phone: {
+                    required: "Vui lòng nhập số điện thoại",
+                    PhoneValidate: "Định dạng số điện thoại không đúng",
+                },
+                Address: {
+                    required: "Vui lòng nhập địa chỉ nhận hàng",
+                },
+                City: {
+                    required: "Vui lòng chọn tỉnh/thành phố"
+                },
+                District: {
+                    required: "Vui lòng chọn quận/huyện"
+                },
+                Ward: {
+                    required: "Vui lòng chọn phường/xã"
+                }
+            }
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $("#City").change(function () {
+                    var CityId = $('#City').val();
+                    $.get("/Checkout/GetDeliveryPrice?CityId=" + CityId, function (data, status) {
+                        document.getElementById('delivery-price').textContent = data.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                        var products_Price = parseInt(document.getElementById('products-price').textContent.replaceAll('.', ''));
+                        var discount_Price = parseInt(document.getElementById('discount-price').textContent.replaceAll('.', ''));
+                        document.getElementById('total-price').textContent = ( products_Price - discount_Price + data).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                    });
+                    $.ajax({
+                        url: '/Checkout/DistrictList',
+                        type: "GET",
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "JSON",
+                        data: { CityId: CityId },
+                        success: function (data) {
+                            $("#District").empty();//Xoa du lieu da chen vao truoc do
+                            $("#Ward").empty();//Xoa du lieu da chen vao truoc do
+                            var strDistrict = '<option value="" disabled selected>Chọn quận / huyện</option>';
+                            $("#District").append(strDistrict);
+                            var strWard = '<option value="" disabled selected>Chọn phường / xã</option>';
+                            $("#Ward").append(strWard);
+                            $.each(data, function (index, item) {
+                                var option = '<option value=" ' + item.districtId + '">' + item.districtName + '</option>';
+                                $("#District").append(option);
+                            });
+                        }
+                    });
+                });
+                $("#District").change(function () {
+                    var DistrictId = $('#District').val();
+                    $.ajax({
+                        url: '/Checkout/WardList',
+                        type: "GET",
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "JSON",
+                        data: { DistrictId: DistrictId },
+                        success: function (data) {
+                            $("#Ward").empty();//Xoa du lieu da chen vao truoc do
+                            var strWard = '<option value="" disabled selected>Chọn phường / xã</option>';
+                            $("#Ward").append(strWard);
+                            $.each(data, function (index, item) {
+                                var option = '<option value=" ' + item.wardId + '">' + item.wardName + '</option>';
+                                $("#Ward").append(option);
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
+}

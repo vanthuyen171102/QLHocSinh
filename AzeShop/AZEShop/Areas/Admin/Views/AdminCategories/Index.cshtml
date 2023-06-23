@@ -1,0 +1,219 @@
+﻿@model IEnumerable<AzeShop.Models.Category>
+
+
+@{
+    ViewData["Title"] = "Danh sách danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách danh mục</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách danh mục</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-4 d-flex">
+                <div class="card border shadow-none w-100">
+                    @{
+                        Html.RenderPartialAsync("Create", new Category());
+                    }
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-8 d-flex">
+                <div class="card border shadow-none w-100">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-affix m-b-10">
+                                    <i class="prefix-icon anticon anticon-search"></i>
+                                    <input type="text" class="form-control" id="mySearchBox" placeholder="Tìm kiếm danh mục">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="data-table" class="table table-hover e-commerce-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên danh mục</th>
+
+                                        <th>Trạng thái</th>
+                                        <th>Tác vụ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+
+                                                <td>#@item.CatId</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar avatar-image" style="height: 70px; width: 70px;">
+                                                            <img src="~/images/category/@item.Thumb" alt="">
+                                                        </div>
+                                                        <h6 class="m-b-0 m-l-10">@item.CatName</h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (@item.Published)
+                                                    {
+                                                        <span style="width:100px" class="badge badge-pill badge-cyan m-r-5">Puslished</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span style="width:100px" class="badge badge-pill badge-volcano m-r-5">Private</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-info btn-tone m-r-5" asp-area="Admin" asp-controller="AdminCategories" asp-action="Details" asp-route-id="@item.CatId">Xem</a>
+                                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminCategories" asp-action="Edit" asp-route-id="@item.CatId">Sửa</a>
+                                                    @if(item.Published)
+                                                    {
+                                                        <button type="button" class="btn btn-danger btn-tone m-r-5" data-toggle="modal" data-target="#lockModal-@item.CatId">
+                                                            <span>Khóa</span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-success btn-tone m-r-5" data-toggle="modal" data-target="#unlockModal-@item.CatId">
+                                                            <span>Mở khóa</span>
+                                                        </button>
+                                                    }
+                                                    
+                                                    <div class="modal fade" id="lockModal-@item.CatId">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Khóa danh mục</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal">
+                                                                        <i class="anticon anticon-close"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Bạn chắc chắn muốn khóa danh mục này ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form asp-action="Lock" asp-route-id="@item.CatId">
+                                                                        <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal fade" id="unlockModal-@item.CatId">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Mở khóa danh mục</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal">
+                                                                        <i class="anticon anticon-close"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Bạn chắc chắn muốn mở khóa danh mục này ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form asp-action="Unlock" asp-route-id="@item.CatId">
+                                                                        <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--end row-->
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $('#Category').addClass('active');
+        $('#data-table').DataTable({
+            "columnDefs": [
+                { "searchable": false, "orderable": false, "targets": [3] }
+            ],
+            destroy: true,
+            bFilter: false,
+            searching: true,
+            "sDom": "ltipr",
+            "bLengthChange": false,
+        });
+        $('#mySearchBox').on('keyup', function () {
+            $('#data-table').DataTable().search(this.value).draw();
+        });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                Thumb: {
+                    required: true,
+                },
+                CatName: {
+                    required: true,
+                    remote: "@Url.Action("CheckCatNameExists", "AdminCategories")"
+                },
+                Title: {
+                    required: true,
+                }
+            },
+            messages: {
+                Thumb: {
+                    required: "Vui lòng chọn ảnh cho danh mục",
+                },
+                CatName: {
+                    required: "Vui lòng nhập tên danh mục",
+                    remote: "Tên danh mục đã được sử dụng",
+                },
+                Title: {
+                    required: "Vui lòng nhập nội dung của trường này",
+                }
+            }
+        });
+    </script>
+}

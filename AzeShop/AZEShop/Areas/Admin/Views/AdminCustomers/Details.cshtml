@@ -1,0 +1,150 @@
+﻿@model AzeShop.Models.Customer
+
+@{
+    ViewData["Title"] = "Thông tin khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    List<Order> orderList = ViewBag.OrderList;
+
+}
+
+<div class="page-header">
+    <h2 class="header-title">Thông tin khách hàng</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminCustomers" asp-action="Index" class="breadcrumb-item">Danh sách khách hàng</a>
+            <span class="breadcrumb-item active">Thông tin khách hàng</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <div class="form-group">
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input type='file' id="imageUpload" asp-for="Avatar" />
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview" style="background-image: url('@Url.Content("~/images/customers/"+Model.Avatar)')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.CustomerId</td>
+                    </tr>
+                    <tr>
+                        <td>Họ và tên:</td>
+                        <td class="text-dark font-weight-semibold">@Model.FullName</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <td>SĐT:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Phone</td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Password</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày sinh:</td>
+                        <td class="text-dark font-weight-semibold">@Convert.ToDateTime(Model.Birthday).ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td>Địa chỉ:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Address</td>
+                    </tr>
+                    <tr>
+                        <td>Tỉnh/TP:</td>
+                        <td class="text-dark font-weight-semibold">@Model.City.CityName</td>
+                    </tr>
+                    <tr>
+                        <td>Trạng thái:</td>
+                        <td>
+                            @if (@Model.Active)
+                            {
+                                <span style="width:100px" class="badge badge-pill badge-cyan m-r-5">Active</span>
+                            }
+                            else
+                            {
+                                <span style="width:100px" class="badge badge-pill badge-volcano m-r-5">Block</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Đăng nhập gần nhất:</td>
+                        <td class="text-dark font-weight-semibold">@Model.LastLogin</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày tạo:</td>
+                        <td class="text-dark font-weight-semibold">@Convert.ToDateTime(Model.CreateDate).ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td>Lịch sử mua hàng:</td>
+
+                        <td>
+                            @if (orderList == null)
+                            {
+                                <span>Không có lịch sử mua hàng!</span>
+                            }
+                            else
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Ngày đặt</th>
+                                                <th scope="col">Thành tiền</th>
+                                                <th scope="col">Thanh toán</th>
+                                                <th scope="col">Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in orderList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a asp-controller="AdminOrders" asp-action="Details" asp-route-id="@item.OrderId">#@item.OrderId</a>
+                                                    </td>
+                                                    <td>@Convert.ToDateTime(item.OrderDate).ToString("dd/MM/yyyy")</td>
+                                                    <td>@item.TotalMoney.ToString("#,##0") VNĐ</td>
+                                                    <td>
+                                                        @if (item.PaymentDate == null)
+                                                        {
+                                                            <span>Chưa thanh toán</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Đã thanh toán</span>
+                                                        }
+                                                    </td>
+                                                    <td>@item.TransactStatus.Status</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#Customer').addClass('active');
+    </script>
+}

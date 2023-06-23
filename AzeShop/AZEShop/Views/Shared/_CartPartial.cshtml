@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString(AzeShop.Controllers.CartController.CARTKEY);
+    List<AzeShop.ModelViews.CartItem> lsItem = null;
+
+    if (jsoncart != null)
+    {
+        lsItem = JsonConvert.DeserializeObject<List<AzeShop.ModelViews.CartItem>>(jsoncart);
+    }
+}
+
+@if (lsItem != null && lsItem.Count > 0)
+{
+        <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-shopping-bag toggle-button-shop" type="button"></button>
+
+        <span class="total-item-round">2</span>
+
+        <!--====== Menu ======-->
+
+        <div class="ah-lg-mode">
+
+            <span class="ah-close">✕ Close</span>
+
+            <!--====== List ======-->
+            <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
+                <li>
+
+                    <a href="home"><i class="fas fa-home u-c-brand"></i></a>
+                </li>
+                <li>
+
+                    <a href="wishlist.html"><i class="far fa-heart"></i></a>
+                </li>
+                <li class="has-dropdown">
+
+                    <a class="mini-cart-shop-link">
+                        <i class="fas fa-shopping-bag"></i>
+
+                        <span class="total-item-round">@lsItem.Count</span>
+                    </a>
+
+                    <!--====== Dropdown ======-->
+
+                    <span class="js-menu-toggle"></span>
+                    <div class="mini-cart">
+
+                        <!--====== Mini Product Container ======-->
+                        <div class="mini-product-container gl-scroll u-s-m-b-15">
+                            @foreach (var item in lsItem)
+                            {
+                                <!--====== Card for mini cart ======-->
+                                <div class="card-mini-product">
+                                    <div class="mini-product">
+                                        <div class="mini-product__image-wrapper">
+
+                                            <a class="mini-product__link" href="/products/@item.product.Alias-@item.product.ProductId">
+
+                                                <img class="u-img-fluid" src="~/images//products/@item.product.Thumb" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="mini-product__info-wrapper">
+
+                                            <span class="mini-product__name">
+
+                                            <a href="/products/@item.product.Alias-@item.product.ProductId">@item.product.ProductName</a>
+                                            </span>
+
+                                            <span class="mini-product__quantity">@item.quantity x</span>
+
+                                            <span class="mini-product__price">
+                                                @String.Format("{0:0,0}",(100-item.product.Discount)*item.product.Price/100) VNĐ
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--====== End - Card for mini cart ======-->
+                            }
+                        </div>
+                        <!--====== End - Mini Product Container ======-->
+                        <!--====== Mini Product Statistics ======-->
+                        <div class="mini-product-stat">
+                            <div class="mini-total">
+
+                                <span class="subtotal-text">THÀNH TIỀN</span>
+
+                                <span class="subtotal-value">
+                                    @String.Format("{0:0,0}",lsItem.Sum(x => (100-x.product.Discount) * (x.product.Price * x.quantity)/100)) VNĐ
+                                </span>
+                            </div>
+                            <div class="mini-action">
+
+                                <a class="mini-link btn--e-brand-b-2" href="/checkout">THANH TOÁN</a>
+
+                                <a class="mini-link btn--e-transparent-secondary-b-2" href="/cart">XEM GIỎ HÀNG</a>
+                            </div>
+                        </div>
+                        <!--====== End - Mini Product Statistics ======-->
+                    </div>
+                    <!--====== End - Dropdown ======-->
+                </li>
+            </ul>
+            <!--====== End - List ======-->
+        </div>
+
+
+        <!--====== End - Menu ======-->
+
+
+}
+else
+{
+
+
+        <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-shopping-bag toggle-button-shop" type="button"></button>
+
+        <span class="total-item-round">2</span>
+    <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
+        <li>
+
+            <a href="home"><i class="fas fa-home u-c-brand"></i></a>
+        </li>
+        <li>
+
+            <a href="wishlist.html"><i class="far fa-heart"></i></a>
+        </li>
+        <li class="has-dropdown">
+
+            <a class="mini-cart-shop-link">
+                <i class="fas fa-shopping-bag"></i>
+
+                <span class="total-item-round">0</span>
+            </a>
+
+            <!--====== Dropdown ======-->
+
+            <span class="js-menu-toggle"></span>
+            <div class="mini-cart">
+
+                <!--====== Mini Product Container ======-->
+                <div class="mini-product-container gl-scroll u-s-m-b-15">
+                </div>
+                <!--====== End - Mini Product Container ======-->
+                <!--====== Mini Product Statistics ======-->
+                <!--====== End - Mini Product Statistics ======-->
+            </div>
+            <!--====== End - Dropdown ======-->
+        </li>
+    </ul>
+
+
+}
+

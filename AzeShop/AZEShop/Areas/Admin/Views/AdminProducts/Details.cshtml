@@ -1,0 +1,293 @@
+﻿@model AzeShop.Models.Product
+
+@{
+    ViewData["Title"] = "Thông tin sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Thông tin sản phẩm</h2>
+    <div class="header-sub-title">
+
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index" class="breadcrumb-item">Danh sách sản phẩm</a>
+            <span class="breadcrumb-item active">Thông tin sản phẩm</span>
+        </nav>
+    </div>
+</div>
+
+<div class="page-header no-gutters has-tab">
+    <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+        <div class="media align-items-center m-b-15">
+            <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
+                <img src="~/images/products/@Model.Thumb" alt="">
+            </div>
+            <div class="m-l-15">
+                <h4 class="m-b-0">@Model.ProductName</h4>
+                <p class="text-muted m-b-0">Mã sản phẩm: #@Model.ProductId</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="m-b-15">
+                <a asp-action="Edit" asp-route-id="@Model.ProductId">
+                    <button class="btn btn-primary">
+                        <i class="anticon anticon-edit"></i>
+                        <span>Sửa</span>
+                    </button>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#product-overview">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#product-images">Product Images</a>
+        </li>
+    </ul>
+</div>
+<div class="container-fluid">
+    <div class="tab-content m-t-15">
+        <div class="tab-pane fade show active" id="product-overview">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <i class="font-size-40 text-success anticon anticon-smile"></i>
+                                <div class="m-l-15">
+                                    <p class="m-b-0 text-muted">10 ratings</p>
+                                    <div class="star-rating m-t-5">
+                                        <input type="radio" id="star3-5" name="rating-3" value="5" checked disabled /><label for="star3-5" title="5 star"></label>
+                                        <input type="radio" id="star3-4" name="rating-3" value="4" disabled /><label for="star3-4" title="4 star"></label>
+                                        <input type="radio" id="star3-3" name="rating-3" value="3" disabled /><label for="star3-3" title="3 star"></label>
+                                        <input type="radio" id="star3-2" name="rating-3" value="2" disabled /><label for="star3-2" title="2 star"></label>
+                                        <input type="radio" id="star3-1" name="rating-3" value="1" disabled /><label for="star3-1" title="1 star"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <i class="font-size-40 text-primary anticon anticon-shopping-cart"></i>
+                                <div class="m-l-15">
+                                    <p class="m-b-0 text-muted">Sales</p>
+                                    <h3 class="m-b-0 ls-1">@ViewBag.Sales</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <i class="font-size-40 text-primary anticon anticon-message"></i>
+                                <div class="m-l-15">
+                                    <p class="m-b-0 text-muted">Reviews</p>
+                                    <h3 class="m-b-0 ls-1">27</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media align-items-center">
+                                <i class="font-size-40 text-primary anticon anticon-stock"></i>
+                                <div class="m-l-15">
+                                    <p class="m-b-0 text-muted">Available Stock</p>
+                                    <h3 class="m-b-0 ls-1">152</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Chi tiết sản phẩm</h4>
+                    <div class="table-responsive">
+                        <table class="product-info-table m-t-20">
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-semibold">Danh mục:</td>
+                                    <td>@Model.Cat.CatName</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">Giá bán:</td>
+                                    <td>
+                                        @String.Format("{0:0,0}",Model.Price) VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">Giảm giá:</td>
+                                    <td>@Model.Discount%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">Tồn kho:</td>
+                                    <td>@Model.UnitsInStock</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">Active:</td>
+                                    <td>
+                                        @if (Model.Active)
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" checked="" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">HomeFlag:</td>
+                                    <td>
+                                        @if (Model.HomeFlag)
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" checked="" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">BestSeller:</td>
+                                    <td>
+                                        @if (Model.BestSeller)
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" checked="" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="switch m-r-10">
+                                                <input type="checkbox" id="switch-1" disabled />
+                                                <label for="switch-1"></label>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">SEO</h4>
+                    <div class="table-responsive">
+                        <table class="product-info-table m-t-20">
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-semibold">Title:</td>
+                                    <td>@Model.Title</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">MetaDesc:</td>
+                                    <td>@Model.MetaDesc</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">MetaKey:</td>
+                                    <td>@Model.MetaKey</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-semibold">Tags:</td>
+                                    <td>@Model.Tags</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Mô tả</h4>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control" disabled>@Model.Description</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="product-images">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img class="img-fluid" src="assets/images/others/product-1.jpg" alt="">
+                        </div>
+                        <div class="col-md-3">
+                            <img class="img-fluid" src="assets/images/others/product-2.jpg" alt="">
+                        </div>
+                        <div class="col-md-3">
+                            <img class="img-fluid" src="assets/images/others/product-3.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="form-row">
+                <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="anticon anticon-delete"></i>
+                    <span>Xóa sản phẩm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn chắc chắn muốn xóa sản phẩm này ?
+            </div>
+            <div class="modal-footer">
+                <form asp-area="Admin" asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@Model.ProductId">
+                    <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#Product').addClass('active');
+    </script>
+}

@@ -1,0 +1,165 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+<div class="menu-init" id="navigation">
+
+    <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs" type="button"></button>
+
+    <!--====== Menu ======-->
+    <div class="ah-lg-mode">
+
+        <span class="ah-close">✕ Close</span>
+
+        <!--====== List ======-->
+        <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
+            <li class="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Tài khoản">
+
+                <a><i class="far fa-user-circle"></i></a>
+
+                <!--====== Dropdown ======-->
+
+                <span class="js-menu-toggle"></span>
+                @if (Accessor.HttpContext.Session.GetString("CustomerId") != null)
+                {
+                    <ul style="width:120px">
+                        <li>
+                            <a href="/account">
+                                <i class="fas fa-user-circle u-s-m-r-6"></i>
+
+                                <span>Tài khoản</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/cart">
+                                <i class="fas fa-shopping-cart u-s-m-r-6"></i>
+
+                                <span>Giỏ hàng</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/checkout">
+                                <i class="fas fa-check-circle u-s-m-r-6"></i>
+
+                                <span>Thanh toán</span>
+                            </a>
+                        </li>
+                        <li>
+
+                            <a href="/logout">
+                                <i class="fas fa-sign-in-alt u-s-m-r-6"></i>
+
+                                <span>Đăng xuất </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                }
+                else
+                {
+                    <ul style="width:120px">
+                        
+
+                        <li>
+
+                            <a href="/login">
+                                <i class="fas fa-lock u-s-m-r-6"></i>
+
+                                <span>Đăng nhập</span>
+                            </a>
+                        </li>
+                        <li>
+
+                            <a href="/register">
+                                <i class="fas fa-user-plus u-s-m-r-6"></i>
+
+                                <span>Đăng ký</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/cart">
+                                <i class="fas fa-shopping-cart u-s-m-r-6"></i>
+
+                                <span>Giỏ hàng</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                }
+                <!--====== End - Dropdown ======-->
+            </li>
+            <li class="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Settings">
+
+                <a><i class="fas fa-user-cog"></i></a>
+
+                <!--====== Dropdown ======-->
+
+                <span class="js-menu-toggle"></span>
+                <ul style="width:120px">
+                    <li class="has-dropdown has-dropdown--ul-right-100">
+
+                        <a>Language<i class="fas fa-angle-down u-s-m-l-6"></i></a>
+
+                        <!--====== Dropdown ======-->
+
+                        <span class="js-menu-toggle"></span>
+                        <ul style="width:120px">
+                            <li>
+
+                                <a class="u-c-brand">ENGLISH</a>
+                            </li>
+                            <li>
+
+                                <a>ARABIC</a>
+                            </li>
+                            <li>
+
+                                <a>FRANCAIS</a>
+                            </li>
+                            <li>
+
+                                <a>ESPANOL</a>
+                            </li>
+                        </ul>
+                        <!--====== End - Dropdown ======-->
+                    </li>
+                    <li class="has-dropdown has-dropdown--ul-right-100">
+
+                        <a>Currency<i class="fas fa-angle-down u-s-m-l-6"></i></a>
+
+                        <!--====== Dropdown ======-->
+
+                        <span class="js-menu-toggle"></span>
+                        <ul style="width:225px">
+                            <li>
+
+                                <a class="u-c-brand">$ - US DOLLAR</a>
+                            </li>
+                            <li>
+
+                                <a>£ - BRITISH POUND STERLING</a>
+                            </li>
+                            <li>
+
+                                <a>€ - EURO</a>
+                            </li>
+                        </ul>
+                        <!--====== End - Dropdown ======-->
+                    </li>
+                </ul>
+                <!--====== End - Dropdown ======-->
+            </li>
+            <li data-tooltip="tooltip" data-placement="left" title="Contact">
+
+                <a href="tel:+0900901904"><i class="fas fa-phone-volume"></i></a>
+            </li>
+            <li data-tooltip="tooltip" data-placement="left" title="Mail">
+
+                <a href="mailto:contact@domain.com"><i class="far fa-envelope"></i></a>
+            </li>
+        </ul>
+        <!--====== End - List ======-->
+    </div>
+    <!--====== End - Menu ======-->
+</div>
+
+

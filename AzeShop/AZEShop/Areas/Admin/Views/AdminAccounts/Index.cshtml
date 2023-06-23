@@ -1,0 +1,112 @@
+﻿@model IEnumerable<AzeShop.Models.Account>
+
+@{
+    ViewData["Title"] = "Danh sách tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách tài khoản</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách tài khoản</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="m-t-25">
+            <div class="row m-b-30">
+                <div class="col-lg-4 text-left">
+                    <a asp-action="Create">
+                        <button class="btn btn-primary">
+                            <i class="anticon anticon-plus-circle m-r-5"></i>
+                            <span>Thêm tài khoản</span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="input-affix m-b-10">
+                        <i class="prefix-icon anticon anticon-search"></i>
+                        <input type="text" class="form-control" id="mySearchBox" placeholder="Tìm kiếm tài khoản">
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        <hr />
+        <table id="data-table" class="table table-hover e-commerce-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên tài khoản</th>
+                    <th>Quyền truy cập</th>
+                    <th>Đăng nhập lần cuối</th>
+                    <th>Ngày tạo</th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>#@item.AccountId</td>
+                            <td>@item.AccountName</td>
+                            <td>
+                                @if (@item.Role.RoleName != null)
+                                {
+                                    <div>@item.Role.RoleName</div>
+                                }
+                                else
+                                {
+                                    <div>Không có</div>
+                                }
+                            </td>
+                            
+                            <td>@item.LastLogin</td>
+                            <td>@item.CreateDate</td>
+                            <td>
+                                <a class="btn btn-primary m-r-5"  asp-area="Admin" asp-controller="AdminAccounts" asp-action="Details" asp-route-id="@item.AccountId">Xem</a>
+                                <a class="btn btn-secondary m-r-5" asp-area="Admin" asp-controller="AdminAccounts" asp-action="Edit" asp-route-id="@item.AccountId">Sửa</a>
+                                <a class="btn btn-danger m-r-5" asp-area="Admin" asp-controller="AdminAccounts" asp-action="Delete" asp-route-id="@item.AccountId">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $('#Account').addClass('active');
+        $('#data-table').DataTable({
+            "columnDefs": [
+                { "searchable": false, "orderable": false, "targets": [5] }
+            ],
+            destroy: true,
+            stateSave: true,
+            bFilter: false,
+            searching: true,
+            "sDom": "ltipr",
+            "bLengthChange": false,
+        });
+        $('#mySearchBox').on('keyup', function () {
+            $('#data-table').DataTable().search(this.value).draw();
+        });
+    </script>
+}

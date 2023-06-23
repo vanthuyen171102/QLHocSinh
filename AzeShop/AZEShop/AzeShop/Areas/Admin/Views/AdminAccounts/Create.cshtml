@@ -1,0 +1,115 @@
+﻿@model AzeShop.Models.Account
+
+@{
+    ViewData["Title"] = "Tạo tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="page-header">
+        <h2 class="header-title">Tạo tài khoản</h2>
+    <div class="header-sub-title">
+
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminAccounts" asp-action="Index" class="breadcrumb-item">Danh sách tài khoản</a>
+            <span class="breadcrumb-item active">Tạo tài khoản</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" id="form-validation">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label">Tên tài khoản</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.AccountName, new {placeholder = "Tên tài khoản", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label">Mật khẩu</label>
+                <div class="col-sm-4">
+                    @Html.PasswordFor(m => m.Password, new {placeholder = "Mật khẩu", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label">Xác nhận mật khẩu</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" name="PasswordConfirm" placeholder="Xác nhận mật khẩu">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label">Quyền truy cập</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.RoleId,ViewBag.QuyenTruyCap as SelectList,"--Chọn quyền truy cập--",new { @class = "custom-select"})
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+
+    <script>
+        $('#Account').addClass('active');
+        
+        jQuery.validator.addMethod("regex", function (value, element, params) {
+            return /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]$/.test(value); 
+        },);
+        
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                AccountName: {
+                    required: true,
+                    minlength: 6,
+                    regex: true,
+                    remote: "@Url.Action("CheckAccountNameExists", "AdminAccounts")"
+                },
+                Password: {
+                    required: true,
+                    minlength: 6
+                },
+                PasswordConfirm: {
+                    required: true,
+                    equalTo: '#Password'
+                },
+                RoleId: {
+                    required: true
+                }
+            },
+            messages: {
+                AccountName: {
+                    required: "Vui lòng nhập tên tài khoản",
+                    minlength: "Tên tài khoản gồm ít nhất 6 kí tự",
+                    regex: "Tên tài khoản không được chứa kí tự đặc biệt",
+                    remote: "Tên tài khoản đã được sử dụng"
+                },
+                Password: {
+                    required: "Vui lòng nhập mật khẩu",
+                    minlength: "Mật khẩu gồm ít nhất 6 kí tự"
+                },
+                PasswordConfirm: {
+                    required: "Vui lòng xác nhận mật khẩu",
+                    equalTo: 'Mật khẩu xác nhận không trùng khớp'
+                },
+                RoleId: "Vui lòng chọn quyền truy cập"
+            }
+        });
+    </script>
+}

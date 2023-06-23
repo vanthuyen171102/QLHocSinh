@@ -1,0 +1,318 @@
+﻿@model IEnumerable<AzeShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <h2 class="header-title">Danh sách sản phẩm</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách sản phẩm</span>
+        </nav>
+    </div>
+    <div class="text-right">
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="AdminProducts" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm sản phẩm</span></a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="input-affix m-v-10">
+                            <select class="custom-select" id="categoryFilter" name="categoryFilter" style="min-width: 150px;" asp-items="ViewBag.DanhMuc">
+                                <option selected value="">Danh mục</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-affix m-v-10">
+                            <select class="custom-select" id="stock-status-dropdown" style="min-width:180px">
+                                <option value="" selected>Tình trạng tồn kho</option>
+                                <option value="0">Còn hàng</option>
+                                <option value="1">Hết hàng</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-affix m-v-10">
+                            <select class="custom-select" id="discount-dropdown" style="min-width:150px">
+                                <option selected value="">Giảm giá</option>
+                                <option value="0">0% - 10%</option>
+                                <option value="1">10% - 20%</option>
+                                <option value="2">20% - 30%</option>
+                                <option value="3">30% - 40%</option>
+                                <option value="4">40% - 50%</option>
+                                <option value="5">50% - 60%</option>
+                                <option value="6">60% - 70%</option>
+                                <option value="7">70% - 80%</option>
+                                <option value="8">80% - 90%</option>
+                                <option value="9">>90%</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-affix m-b-10">
+                            <i class="prefix-icon anticon anticon-search"></i>
+                            <input type="text" class="form-control" id="mySearchBox" placeholder="Tìm kiếm sản phẩm">
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-2">
+                        <button class="btn btn-default m-r-5" data-toggle="modal" data-target="#filterModal">
+                            <i class="fas fa-filter"></i>
+                            <span>Lọc</span>
+                        </button>
+                    </div>
+                    <div class="col-md-0.5">
+                        <button id="export-button" class="btn btn-default m-r-5">
+                            <i class="fas fa-file-excel-o"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="table-responsive" id="table">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="filterModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Lọc sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="slider-range"></div>
+                        </div>
+                    </div>
+                    <div class="row slider-labels">
+                        <div class="col-xs-6 caption">
+                            <strong>Từ:</strong> <span id="slider-range-value1"></span>
+                        </div>
+                        <hr>
+                        <div class="col-xs-6 caption">
+                            <strong>Đến:</strong> <span id="slider-range-value2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form>
+                                <input type="hidden" id="min-value" value="">
+                                <input type="hidden" id="max-value" value="">
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="all-Active" type="checkbox" checked="">
+                            <label for="all-Active">Tất cả</label>
+                        </div>
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="Active" type="checkbox" checked="">
+                            <label for="Active">Active</label>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="all-BestSeller" type="checkbox" checked="">
+                            <label for="all-BestSeller">Tất cả</label>
+                        </div>
+
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="BestSeller" type="checkbox" checked="">
+                            <label for="BestSeller">BestSeller</label>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="all-HomeFlag" type="checkbox" checked="">
+                            <label for="all-HomeFlag">Tất cả</label>
+                        </div>
+                        <div class="checkbox m-b-10 col-lg-4">
+                            <input id="HomeFlag" type="checkbox" checked="">
+                            <label for="HomeFlag">HomeFlag</label>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="filterButton" class="btn btn-secondary text-center" data-dismiss="modal">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $('#Product').addClass('active');
+    </script>
+
+    <script>
+        function loadProductList() {
+            var stockStatus = null;
+            if (parseInt($('#stock-status-dropdown').find(":selected").val()) == 0) {
+                stockStatus = true;
+            }
+            else if (parseInt($('#stock-status-dropdown').find(":selected").val()) == 1) {
+                stockStatus = false;
+            }
+
+            var discountValue = parseInt($('#discount-dropdown').find(":selected").val());
+            var discountFrom = 0;
+            var discountTo = 100;
+            switch (discountValue) {
+                case 0:
+                    discountTo = 10;
+                    break;
+
+                case 1:
+                    discountFrom = 10;
+                    discountTo = 20;
+                    break;
+                case 2:
+                    discountFrom = 20;
+                    discountTo = 30;
+                    break;
+                case 3:
+                    discountFrom = 30;
+                    discountTo = 40;
+                    break;
+                case 4:
+                    discountFrom = 40;
+                    discountTo = 50;
+                    break;
+                case 5:
+                    discountFrom = 50;
+                    discountTo = 60;
+                    break;
+                case 6:
+                    discountFrom = 60;
+                    discountTo = 70;
+                    break;
+                case 7:
+                    discountFrom = 70;
+                    discountTo = 80;
+                    break;
+                case 8:
+                    discountFrom = 80;
+                    discountTo = 90;
+                    break;
+                case 9:
+                    discountFrom = 90;
+                    break;
+                default:
+                    break;
+            }
+
+            var active = null;
+            var homeflag = null;
+            var bestseller = null;
+            if ($('#all-Active').filter(":checked").val() != 'on') {
+                if ($('#Active').filter(":checked").val() == 'on') {
+                    active = true;
+                }
+                else active = false;
+            }
+            if ($('#all-HomeFlag').filter(":checked").val() != 'on') {
+                if ($('#HomeFlag').filter(":checked").val() == 'on') {
+                    homeflag = true;
+                }
+                else homeflag = false;
+            }
+            if ($('#all-BestSeller').filter(":checked").val() != 'on') {
+                if ($('#BestSeller').filter(":checked").val() == 'on') {
+                    bestseller = true;
+                }
+                else bestseller = false;
+            }
+
+
+
+
+            var minPrice = $('#min-value').val();
+            var maxPrice = $('#max-value').val();
+            $("#table").load("/Admin/AdminProducts/ProductList?Stock=" + stockStatus + "&discountFrom=" + discountFrom + "&discountTo=" + discountTo + "&minPrice=" + Number(minPrice) + "&maxPrice=" + Number(maxPrice) + "&isActive=" + active + "&isHomeFlag=" + homeflag + "&isBestSeller=" + bestseller, function (response, status, xhr) {
+                if (status == "success") {
+                }
+                if (status == "error")
+                    alert("Lỗi 2: " + xhr.status + ": " + xhr.status);
+            });
+        }
+
+
+
+        $("document").ready(function () {
+            loadProductList();
+            $("#filterTable").dataTable({
+                "columnDefs": [
+                    { "searchable": false, "orderable": false, "targets": [6] }
+                ],
+                destroy: true,
+                bFilter: false,
+                stateSave: true,
+                searching: true,
+                "sDom": "ltipr",
+                "bLengthChange": false,
+            });
+            $('#mySearchBox').on('keyup', function () {
+                $('#filterTable').DataTable().search(this.value).draw();
+            });
+
+        });
+
+        $('#stock-status-dropdown').on('change', function () { loadProductList() });
+        $('#discount-dropdown').on('change', function () { loadProductList() });
+        $('#filterButton').on('click', function () { loadProductList() });
+
+        $("#export-button").click(function () {
+            html_table_to_excel('xlsx');
+        });
+        function html_table_to_excel(type) {
+            var data = document.getElementById('data-table');
+            var file = XLSX.utils.table_to_book(data, { sheet: "sheet1" });
+
+            XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+            XLSX.writeFile(file, 'Product.' + type);
+        }
+
+    </script>
+}

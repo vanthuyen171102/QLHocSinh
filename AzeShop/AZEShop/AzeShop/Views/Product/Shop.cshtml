@@ -1,0 +1,534 @@
+﻿@using PagedList.Core.Mvc;
+@model PagedList.Core.IPagedList<AzeShop.Models.Product>
+
+@{
+    var alias = "";
+    int PageCurrent = ViewBag.CurrentPage;
+    int TotalPage;
+    if (ViewBag.CountPage < 1)
+    {
+        TotalPage = 1;
+    }
+    else
+        TotalPage = ViewBag.CountPage;
+    if (ViewBag.CurrentCat != null)
+    {
+        Category category = ViewBag.CurrentCat;
+        alias = category.Alias.ToString();
+    }
+    Layout = null;
+}
+<style>
+
+    a.disabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
+</style>
+
+
+<!--====== jQuery Shopnav plugin ======-->
+<script src="~/assets/js/jquery.shopnav.js"></script>
+
+<!--====== App ======-->
+<script src="~/assets/js/app.js"></script>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="row is-grid-active">
+        @foreach (var item in Model)
+        {
+            <!--====== Quick Look Modal ======-->
+            <div class="modal fade quick-look" id="quick-look-@item.ProductId">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modal--shadow">
+
+                        <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal"></button>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+
+                                    <!--====== Product Breadcrumb ======-->
+                                    <div class="pd-breadcrumb u-s-m-b-30">
+                                        <ul class="pd-breadcrumb__list">
+                                            <li class="has-separator">
+
+                                                <a href="/home">Trang chủ</a>
+                                            </li>
+                                            <li class="is-marked">
+
+                                                <a href="/danhmuc/@item.Cat.Alias">@item.Cat.CatName</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!--====== End - Product Breadcrumb ======-->
+                                    <!--====== Product Detail ======-->
+                                    <div class="pd u-s-m-b-30">
+                                        <div class="pd-wrap">
+                                            <div id="js-product-detail-modal">
+                                                <div>
+                                                    <img class="u-img-fluid" src="~/images/products/@item.Thumb" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--====== End - Product Detail ======-->
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <!--====== Product Right Side Details ======-->
+                                    <div class="pd-detail">
+                                        <div>
+
+                                            <span class="pd-detail__name">@item.ProductName</span>
+                                        </div>
+                                        <div>
+                                            <div class="pd-detail__inline">
+
+
+                                                <span class="pd-detail__price" style="font-size: x-large">
+                                                    @String.Format("{0:0,0}",(100-item.Discount)*item.Price/100) VNĐ
+                                                </span>
+                                                @if (item.Discount > 0)
+                                                {
+                                                    <span class="pd-detail__discount">(GIẢM @item.Discount%)</span>
+
+                                                    <del class="pd-detail__del" style="font-size: medium">
+                                                        @String.Format("{0:0,0}",item.Price) VNĐ
+                                                    </del>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="u-s-m-b-15">
+                                            <div class="pd-detail__rating gl-rating-style">
+                                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+
+                                                <span class="pd-detail__review u-s-m-l-4">
+
+                                                    <a href="product-detail.html">23 Reviews</a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="u-s-m-b-15">
+                                            <div class="pd-detail__inline">
+
+                                                <span class="pd-detail__stock">Tồn kho: @item.UnitsInStock</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="u-s-m-b-15">
+                                            @if (item.Description != null)
+                                            {
+                                                <span class="pd-detail__preview-desc">@item.Description</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="pd-detail__preview-desc">Chưa có mô tả về sản phẩm này</span>
+
+                                            }
+                                        </div>
+
+                                        <div class="u-s-m-b-15">
+                                            <form class="pd-detail__form">
+                                                <div class="pd-detail-inline-2">
+                                                    <div class="u-s-m-b-15">
+
+                                                        <!--====== Input Counter ======-->
+                                                        <div class="input-counter">
+
+                                                            <span class="input-counter__minus fas fa-minus"></span>
+
+                                                            <input class="input-counter__text input-counter--text-primary-style" id="@($"quantity-{item.ProductId}")" type="text" value="1" data-min="1" data-max="1000">
+
+                                                            <span class="input-counter__plus fas fa-plus"></span>
+                                                        </div>
+                                                        <!--====== End - Input Counter ======-->
+                                                    </div>
+                                                    <div class="u-s-m-b-15">
+
+                                                        <button data-productid="@item.ProductId" class="btn btn--e-brand-b-2 item-addCart-with-quantity" type="submit">Thêm vào giỏ hàng</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="u-s-m-b-15">
+
+                                            <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                            <ul class="pd-detail__policy-list">
+                                                <li>
+                                                    <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                    <span>Buyer Protection.</span>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                    <span>Full Refund if you don't receive your order.</span>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                    <span>Returns accepted if product not as described.</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!--====== End - Product Right Side Details ======-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Quick Look Modal ======-->
+            <!--====== Add to Cart Modal ======-->
+            <div class="modal fade" id="add-to-cart-@item.ProductId">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modal-radius modal-shadow">
+
+                        <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal"></button>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="success u-s-m-b-30">
+                                        <div class="success__text-wrap">
+                                            <i class="fas fa-check"></i>
+
+                                            <span>Sản phẩm đã được thêm vào giỏ hàng!</span>
+                                        </div>
+                                        <div class="success__img-wrap">
+
+                                            <img class="u-img-fluid" src="~/images/products/@item.Thumb" alt="">
+                                        </div>
+                                        <div class="success__info-wrap">
+
+                                            <span class="success__name">@item.ProductName</span>
+
+
+                                            <span class="success__price">
+                                                @String.Format("{0:0,0}",(100-item.Discount)*item.Price/100) VNĐ
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="s-option">
+
+                                        <span class="s-option__text">1 item (s) in your cart</span>
+                                        <div class="s-option__link-box">
+
+                                            <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">TIẾP TỤC MUA SẮM</a>
+
+                                            <a class="s-option__link btn--e-white-brand-shadow" href="/cart">ĐẾN GIỎ HÀNG</a>
+
+                                            <a class="s-option__link btn--e-brand-shadow" href="/checkout">THANH TOÁN</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Add to Cart Modal ======-->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product-m">
+                    <div class="product-m__thumb">
+
+                        <a class="aspect aspect--bg-grey aspect--square u-d-block" href="/products/@item.Alias-@item.ProductId">
+
+                            <img class="aspect__img" src="~/images/products/@item.Thumb" alt="">
+                        </a>
+                        <div class="product-m__quick-look">
+
+                            <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look-@item.ProductId" data-tooltip="tooltip" data-placement="top" title="Xem nhanh"></a>
+                        </div>
+                        <div class="product-m__add-cart">
+                            <a class="btn--e-brand item-addCart" data-productid="@item.ProductId">Thêm vào giỏ hàng</a>
+                        </div>
+                    </div>
+                    <div class="product-m__content">
+                        <div class="product-m__category">
+
+                            <a href="/collections/@item.Cat.Alias">@item.Cat.CatName</a>
+                        </div>
+                        <div class="product-m__name">
+
+                            <a href="/products/@item.Alias-@item.ProductId">@item.ProductName</a>
+                        </div>
+                        <div class="product-m__rating gl-rating-style">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+
+                            <span class="product-m__review">(23)</span>
+                        </div>
+                        <span class="pd-detail__price" style="font-size: medium">
+                            @String.Format("{0:0,0}",(100-item.Discount)*item.Price/100) VNĐ
+                        </span>
+                        @if (item.Discount > 0)
+                        {
+                            <span class="pd-detail__discount">(GIẢM @item.Discount%)</span>
+
+                            <del class="pd-detail__del" style="font-size: small">
+                                @String.Format("{0:0,0}",item.Price) VNĐ
+                            </del>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <div class="u-s-p-y-60">
+        <!--====== Pagination ======-->
+        <ul class="shop-p__pagination">
+            <li>
+                <a class="fas fa-angle-double-left" id="first-button"></a>
+            </li>
+            <li>
+                <a class="fas fa-angle-left" id="previus-button"></a>
+            </li>
+            @if (TotalPage < 6)
+            {
+                @for (var i = 1; i <= TotalPage; i++)
+                {
+                    <li id="page-@i">
+                        <a class="page-link-number" data-page-index="@i">@i</a>
+                    </li>
+                }
+
+            }
+            else
+            {
+                var pageCutLow = PageCurrent - 1;
+                var pageCutHigh = PageCurrent + 1;
+                if (PageCurrent > 2)
+                {
+                    <li id="page-1">
+                        <a class="page-link-number">1</a>
+                    </li>
+                    if (PageCurrent > 3)
+                    {
+                        <li>
+                            <a>...</a>
+                        </li>
+                    }
+                }
+
+                if (PageCurrent == 1)
+                {
+                    pageCutHigh += 2;
+                }
+                else if (PageCurrent == 2)
+                {
+                    pageCutHigh += 1;
+                }
+                if (PageCurrent == TotalPage)
+                {
+                    pageCutLow -= 2;
+                }
+                else if (PageCurrent == TotalPage - 1)
+                {
+                    pageCutLow -= 1;
+                }
+                for (int i = pageCutLow; i <= pageCutHigh; i++)
+                {
+                    if (i == 0)
+                    {
+                        i += 1;
+                    }
+                    if (i > TotalPage)
+                    {
+                        continue;
+                    }
+                    if (i == PageCurrent)
+                    {
+                        <li id="page-@i">
+                            <a class="page-link-number" data-page-index="@i">@i</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li id="page-@i">
+                            <a class="page-link-number" data-page-index="@i">@i</a>
+                        </li>
+                    }
+                }
+                if (PageCurrent < TotalPage - 1)
+                {
+                    if (PageCurrent < TotalPage - 2)
+                    {
+                        <li>
+                            <a>...</a>
+                        </li>
+                    }
+                    <li id="page-@TotalPage">
+                        <a class="page-link-number" data-page-index="@TotalPage">@TotalPage</a>
+                    </li>
+                }
+            }
+
+            <li>
+                <a class="fas fa-angle-right" id="next-button"></a>
+            </li>
+            <li>
+                <a class="fas fa-angle-double-right" id="last-button"></a>
+            </li>
+        </ul>
+        <!--====== End - Pagination ======-->
+    </div>
+
+    <!--====== Section 1 ======-->
+    <!--====== End - Section 1 ======-->
+    <script>
+        function loadProductList(page){
+            var sortOrder = $('#list-sort-dropdown').find(":selected").data('sort');
+            var pageSize = $('#list-pageSize-dropdown').find(":selected").data('size');
+            var keyword = "";
+            if ($('#keyword') != null) {
+                keyword = $('#keyword').val();
+            }
+            var minPrice = $('#min-value').val();
+            var maxPrice = $('#max-value').val();
+            $("#product-list-partial").load("/Product/Shop?alias=" + '@alias' + "&sortOrder=" + sortOrder + "&pageSize=" + pageSize + "&searchString=" + keyword + "&minPrice=" + Number(minPrice) + "&maxPrice=" + Number(maxPrice)+"&page="+page, function (response, status, xhr) {
+                if (status == "success") {
+                }
+                if (status == "error")
+                    alert("Lỗi 2: " + xhr.status + ": " + xhr.status);
+            });
+        }
+        $(document).ready(function () {
+            var page = @Convert.ToInt32(PageCurrent);
+            var totalPage = @Convert.ToInt32(TotalPage);
+            $('#page-' + page).addClass("is-active");
+            if (page == 1) {
+                $("#previus-button").addClass("disabled");
+                $("#first-button").addClass("disabled");
+            }
+            if (page == totalPage) {
+                $("#next-button").addClass("disabled");
+                $("#last-button").addClass("disabled");
+            }
+
+        });
+
+        $('.item-addCart').click(function () {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                url: "/addcart/" + productid,
+                cache: false,
+                async: true,
+                success: function (response) {
+                    if (response.status == "success") {
+                        $("#add-to-cart-" + productid).modal('show');
+                        $("#cart-partial").load("/Home/LoadCartPartial", function (response, status, xhr) {
+                            if (status == "success") {
+
+                            }
+                            if (status == "error")
+                                alert("Error: " + xhr.status + ": " + xhr.status);
+                        });
+                    }
+                },
+                error: function (data) {
+                    alert("khong thanh c");
+                }
+            });
+        });
+        $('.item-addCart-with-quantity').click(function () {
+            event.preventDefault();
+            var productid = $(this).attr("data-productid");
+            var quantity = $("#quantity-" + productid).val();
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                url: "/addcart/" + productid + "." + quantity,
+                cache: false,
+                async: true,
+                success: function (response) {
+                    if (response.status == "success") {
+                        $("#add-to-cart-" + productid).modal('show');
+                        $("#cart-partial").load("/Home/LoadCartPartial", function (response, status, xhr) {
+                            if (status == "success") {
+                            }
+                            if (status == "error")
+                                alert("Error: " + xhr.status + ": " + xhr.status);
+                        });
+                    }
+                },
+                error: function (data) {
+                    alert("khong thanh c");
+                }
+            });
+        });
+        $("#previus-button").click(function () {
+            var previusPage = @Convert.ToInt32(PageCurrent) - 1;
+            loadProductList(previusPage);
+        });
+        $('#next-button').click(function () {
+            var nextPage = @Convert.ToInt32(PageCurrent) + 1;
+            loadProductList(nextPage);
+        });
+        $("#first-button").click(function () {
+            loadProductList(1);
+        });
+        $('#last-button').click(function () {
+            var totalPage = @Convert.ToInt32(TotalPage);
+            loadProductList(totalPage);
+        });
+        $('.page-link-number').click(function () {
+            var page = $(this).attr("data-page-index");
+            loadProductList(page);
+        });
+
+    </script>
+
+}
+else
+{
+    <div class="u-s-p-y-90">
+
+        <!--====== Section Content ======-->
+        <div class="section__content text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                        <div class="empty">
+                            <div class="empty__wrap">
+
+                                <span class="empty__big-text">XIN LỖI</span>
+
+                                <span class="empty__text-1">
+                                    Không tìm thấy sản phẩm phù hợp
+                                </span>
+
+                                <a class="empty__redirect-link btn--e-brand" href="/home">QUAY LẠI TRANG CHỦ</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+
+    
+    <!--====== Section 1 ======-->
+    <!--====== End - Section 1 ======-->
+}
+@section Scripts
+    {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+}
+
+

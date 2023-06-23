@@ -1,0 +1,47 @@
+#loginScene{
+	-fx-background-color: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+}
+#loginButton:hover{
+    -fx-scale-y: 1.1;
+}
+#loginButton:pressed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+#addButton{
+	-fx-background-color:  #00ffff;
+	-fx-background-radius: 20px;
+}
+#cleanButton{
+	-fx-background-color:   #FFFF00;
+	-fx-background-radius: 20px;
+}
+
+#addButton:hover{
+	-fx-background-color: #00ff00;
+ 	-fx-scale-y: 1.1;
+}
+#cleanButton:hover{
+	-fx-background-color:  #ffff66;
+ 	-fx-scale-y: 1.1;
+}
+#addButton:pressed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+#cleanButton:pressed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+#updateButton{
+	-fx-background-color:  #00ff55;
+	-fx-background-radius: 20px;
+}
+#updateButton:hover{
+	-fx-background-color: #00e600;
+ 	-fx-scale-y: 1.1;
+}
+#updateButton:pressed {
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}

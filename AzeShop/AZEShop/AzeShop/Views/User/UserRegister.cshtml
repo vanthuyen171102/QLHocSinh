@@ -1,0 +1,208 @@
+﻿@model AzeShop.ModelViews.UserRegisterModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <!--====== Section 1 ======-->
+    <div class="u-s-p-y-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="breadcrumb">
+                    <div class="breadcrumb__wrap">
+                        <ul class="breadcrumb__list">
+                            <li class="has-separator">
+
+                                <a href="home">Trang chủ</a>
+                            </li>
+                            <li class="is-marked">
+
+                                <a href="register">Đăng ký</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Section 1 ======-->
+    <!--====== Section 2 ======-->
+    <div class="u-s-p-b-60">
+
+        <!--====== Section Intro ======-->
+        <div class="section__intro u-s-m-b-60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section__text-wrap">
+                            <h1 class="section__heading u-c-secondary">TẠO TÀI KHOẢN</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Intro ======-->
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="row row--center">
+                    <div class="col-lg-6 col-md-8 u-s-m-b-30">
+                        <div class="l-f-o">
+                            <div class="l-f-o__pad-box">
+                                <h1 class="gl-h1">THÔNG TIN CÁ NHÂN</h1>
+                                <form class="l-f-o__form" id="form-validation" asp-controller="User" asp-action="UserRegister" method="post">
+                                    <div class="u-s-m-b-30">
+
+                                        <label class="gl-label" for="reg-fname">HỌ VÀ TÊN *</label>
+                                        @Html.TextBoxFor(m => m.FullName, new {placeholder = "Họ và tên", @class = "input-text input-text--primary-style" })
+                                    </div>
+                                    <div class="u-s-m-b-30">
+
+                                        <label class="gl-label" for="reg-fname">SỐ ĐIỆN THOẠI *</label>
+
+                                        @Html.TextBoxFor(m => m.Phone, new {placeholder = "Số điện thoại", @class = "input-text input-text--primary-style" })
+                                    </div>
+                                    <div class="u-s-m-b-30">
+
+                                        <label class="gl-label" for="reg-fname">ĐỊA CHỈ *</label>
+
+                                        @Html.TextBoxFor(m => m.Address, new {placeholder = "Địa chỉ", @class = "input-text input-text--primary-style" })
+                                    </div>
+                                    <div class="gl-inline">
+                                        <div class="u-s-m-b-30">
+
+                                            <label class="gl-label" for="CityId">
+                                                TỈNH/THÀNH PHỐ
+                                            </label>
+                                                @Html.DropDownListFor(m => m.CityId,ViewBag.TinhThanh as SelectList,"Chọn tỉnh/thành phố",new { @class = "select-box select-box--primary-style u-w-100"})
+                                        </div>
+                                    </div>
+                                    <div class="u-s-m-b-30">
+
+                                        <label class="gl-label" for="reg-email">E-MAIL *</label>
+                                        @Html.TextBoxFor(m => m.Email, new {placeholder = "Email", @class = "input-text input-text--primary-style" })
+
+                                    </div>
+                                    <div class="u-s-m-b-30">
+                                        <label class="gl-label" for="reg-password">MẬT KHẨU *</label>
+                                        @Html.PasswordFor(m => m.Password, new {placeholder = "Mật khẩu", @class = "input-text input-text--primary-style" })
+                                    </div>
+                                    <div class="u-s-m-b-30">
+                                        <label class="gl-label" for="reg-password">XÁC NHẬN MẬT KHẨU *</label>
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new {placeholder = "Xác nhận mật khẩu", @class = "input-text input-text--primary-style" })
+                                    </div>
+                                    <div class="u-s-m-b-15">
+                                        <button class="btn btn--e-transparent-brand-b-2" type="submit">ĐĂNG KÝ</button>
+                                    </div>
+
+                                    <a class="gl-link" href="home">Quay lại trang chủ</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 2 ======-->
+
+
+
+
+@section Scripts
+    {
+
+    <script src="~/AdminAssets/vendors/jquery-validation/jquery.validate.min.js"></script>
+
+    <style>
+        div .is-invalid {
+            color: red;
+        }
+    </style>
+    <script>
+        jQuery.validator.addMethod('PhoneValidate', function (value, element) {
+            if (/^\d{3}-?\d{3}-?\d{4}$/g.test(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                FullName: {
+                    required: true,
+                },
+                Address: {
+                    required: true,
+                },
+                Email: {
+                    required: true,
+                    email: true,
+                    remote: "@Url.Action("CheckEmailUsed", "User")"
+                },
+                Phone: {
+                    required: true,
+                    PhoneValidate: true,
+                    remote: "@Url.Action("CheckPhoneUsed", "User")"
+
+                },
+                Password: {
+                    required: true,
+                    minlength: 8
+                },
+                ConfirmPassword: {
+                    required: true,
+                    equalTo: '#Password'
+                },
+
+                CityId: {
+                    required: true
+                }
+            },
+            messages: {
+                FullName: {
+                    required: "Vui lòng nhập họ tên",
+                },
+                Address: {
+                    required: "Vui lòng nhập địa chỉ",
+                },
+                Email: {
+                    required: "Vui lòng nhập địa chỉ Email",
+                    email: "Đây không phải định dạng Email",
+                    remote: "Địa chỉ Email đã được sử dụng"
+                },
+                Phone: {
+                    required: "Vui lòng nhập số điện thoại",
+                    PhoneValidate: "Định dạng số điện thoại không đúng",
+                    remote: "Số điện thoại đã được sử dụng"
+
+                },
+                Password: {
+                    required: "Vui lòng nhập mật khẩu",
+                    minlength: "Mật khẩu gồm ít nhất 8 kí tự"
+                },
+                ConfirmPassword: {
+                    required: "Vui lòng xác nhận mật khẩu",
+                    equalTo: 'Mật khẩu xác nhận không trùng khớp'
+                },
+                CityId: {
+                    required: "Vui lòng chọn tỉnh/thành phố"
+                }
+            }
+        });
+    </script>
+
+}
+

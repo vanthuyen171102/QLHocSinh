@@ -1,0 +1,175 @@
+﻿@model IEnumerable<Product>
+
+
+    @if(Model!=null)
+    {
+    <table id="data-table" class="table table-hover e-commerce-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Giá</th>
+                <th>Giảm giá</th>
+                <th>Tồn kho</th>
+                <th>Trạng thái</th>
+                <th>Tác vụ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>#@item.ProductId</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-image" style="height: 70px; width: 70px;">
+                                    <img src="~/images//products/@item.Thumb" alt="">
+                                </div>
+                                <h6 class="m-b-0 m-l-10">@item.ProductName</h6>
+                            </div>
+                        </td>
+                        <td>@item.Cat.CatName</td>
+                        <td>@String.Format("{0:0,0}",item.Price) VNĐ</td>
+                        <td>@item.Discount%</td>
+                        <td>@item.UnitsInStock</td>
+                        <td>
+                            @if (item.Active)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="badge badge-success badge-dot m-r-10"></div>
+                                    <div>Active</div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="badge badge-danger badge-dot m-r-10"></div>
+                                    <div>Block</div>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-area="Admin" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">
+                                <i class=" anticon anticon-info"></i>
+                            </a>
+                            <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-area="Admin" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@item.ProductId">
+                                <i class=" anticon anticon-edit"></i>
+                            </a>
+                            @if (item.Active)
+                            {
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#lockModal-@item.ProductId">
+                                    <i class="anticon anticon-lock"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#unlockModal-@item.ProductId">
+                                    <i class="anticon anticon-unlock"></i>
+                                </a>
+                            }
+                            <div class="modal fade" id="lockModal-@item.ProductId">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Khóa sản phẩm</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <i class="anticon anticon-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn chắc chắn muốn khóa sản phẩm này ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form asp-action="Lock" asp-route-id="@item.ProductId">
+                                                <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="unlockModal-@item.ProductId">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Mở khóa sản phẩm</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <i class="anticon anticon-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn chắc chắn muốn mở khóa sản phẩm này ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form asp-action="UnLock" asp-route-id="@item.ProductId">
+                                                <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+
+
+
+    <script>
+
+        $("#data-table").dataTable({
+
+            "columnDefs": [
+                { "searchable": false, "orderable": false, "targets": [7] }
+            ],
+            destroy: true,
+            bFilter: true,
+            searching: true,
+            "sDom": "ltipr",
+            "bLengthChange": false,
+        });
+        $('#mySearchBox').on('keyup', function () {
+            $('#data-table').DataTable().search(this.value).draw();
+        });
+
+        var table = $('#data-table').DataTable();
+
+        $("#data-table_filter.dataTables_filter").append($("#categoryFilter"));
+
+
+        var categoryIndex = 2;
+        $("#data-table th").each(function (i) {
+            if ($($(this)).html() == "Category") {
+                categoryIndex = i; return false;
+            }
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var selectedItem = $('#categoryFilter').val()
+                var category = data[categoryIndex];
+                if (selectedItem === "" || category.includes(selectedItem)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        $("#categoryFilter").change(function (e) {
+            table.draw();
+        });
+
+        table.draw();
+
+    </script>
+    }
+
+

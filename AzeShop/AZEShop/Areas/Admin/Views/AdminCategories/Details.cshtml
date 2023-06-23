@@ -1,0 +1,114 @@
+﻿@model AzeShop.Models.Category
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Chi tiết danh mục</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminCategories" asp-action="Index" class="breadcrumb-item">Danh sách danh mục</a>
+            <span class="breadcrumb-item active">Chi tiết danh mục</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <div class="form-group">
+                            <div class="avatar-upload">
+                                <div class="avatar-edit">
+                                    <input type='file' id="imageUpload" asp-for="Thumb" name="fThumb" accept=".png, .jpg, .jpeg" />
+                                </div>
+                                <div class="avatar-preview">
+                                    <div id="imagePreview" style="background-image: url('@Url.Content("~/images/category/"+Model.Thumb)')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.CatId</td>
+                    </tr>
+                    <tr>
+                        <td>Tên danh mục:</td>
+                        <td class="text-dark font-weight-semibold">@Model.CatName</td>
+                    </tr>
+                    <tr>
+                        <td>Title:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Title</td>
+                    </tr>
+                    <tr>
+                        <td>Alias:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Alias</td>
+                    </tr>
+                    <tr>
+                        <td>Trạng thái:</td>
+                        <td>
+                            @if (@Model.Published)
+                            {
+                                <span style="width:100px" class="badge badge-pill badge-cyan m-r-5">Puslished</span>
+                            }
+                            else
+                            {
+                                <span style="width:100px" class="badge badge-pill badge-volcano m-r-5">Private</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mô tả:</td>
+                        <td>
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control text-dark font-weight-semibold" ,@readonly = "true"} )
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <br />
+            <div class="text-left">
+                <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="anticon anticon-delete"></i>
+                    <span>Xóa danh mục</span>
+                </button>
+                <div class="modal fade" id="confirmDeleteModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Xóa danh mục</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <i class="anticon anticon-close"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn chắc chắn muốn xóa danh mục này ?
+                            </div>
+                            <div class="modal-footer">
+                                <form asp-action="Delete" asp-route-id="@Model.CatId">
+                                    <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#Category').addClass('active');
+    </script>
+}

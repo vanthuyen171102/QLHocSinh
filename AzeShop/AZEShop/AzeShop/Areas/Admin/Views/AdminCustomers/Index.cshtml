@@ -1,0 +1,172 @@
+﻿@model IEnumerable<AzeShop.Models.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách khách hàng</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách khách hàng</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-affix m-b-10">
+                    <i class="prefix-icon anticon anticon-search"></i>
+                    <input type="text" class="form-control" id="mySearchBox" placeholder="Tìm kiếm khách hàng">
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="data-table" class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Avatar</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Tỉnh/TP</th>
+                        <th>Trạng thái</th>
+                        <th>Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>#@item.CustomerId</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-image" style="height: 70px; width: 70px;">
+                                            <img src="~/images//customers/@item.Avatar" alt="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@item.FullName</td>
+                                <td>@item.Email</td>
+                                <td>@item.Phone</td>
+                                <td>@item.City.CityName</td>
+                                <td>
+                                    @if (item.Active)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-success badge-dot m-r-10"></div>
+                                            <div>Active</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-danger badge-dot m-r-10"></div>
+                                            <div>Block</div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-area="Admin" asp-controller="AdminCustomers" asp-action="Details" asp-route-id="@item.CustomerId">
+                                        <i class=" anticon anticon-info"></i>
+                                    </a>
+                                    
+                                    @if(item.Active)
+                                    {
+                                        <a class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#lockModal-@item.CustomerId">
+                                            <i class="anticon anticon-lock"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target="#unlockModal-@item.CustomerId">
+                                            <i class="anticon anticon-unlock"></i>
+                                            </a>
+                                    }
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="lockModal-@item.CustomerId">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Cấm khách hàng</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <i class="anticon anticon-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn chắc chắn muốn cấm khách hàng này ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form asp-action="Lock" asp-route-id="@item.CustomerId">
+                                                <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="unlockModal-@item.CustomerId">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Bỏ cấm khách hàng</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <i class="anticon anticon-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn chắc chắn muốn bỏ cấm cho khách hàng này ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form asp-action="Unlock" asp-route-id="@item.CustomerId">
+                                                <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#app').addClass('is-folded');
+        $('#Customer').addClass('active');
+    </script>
+
+    <script>
+        $("document").ready(function () {
+
+            $("#data-table").dataTable({
+                "columnDefs": [
+                    { "searchable": false, "orderable": false, "targets": [7] }
+                ],
+                destroy: true,
+                stateSave: true,
+                bFilter: false,
+                searching: true,
+                "sDom": "ltipr",
+                "bLengthChange": false,
+            });
+            $('#mySearchBox').on('keyup', function () {
+                $('#data-table').DataTable().search(this.value).draw();
+            });
+        });
+    </script>
+}

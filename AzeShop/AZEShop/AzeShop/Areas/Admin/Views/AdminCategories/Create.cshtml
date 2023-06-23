@@ -1,0 +1,102 @@
+﻿@model AzeShop.Models.Category
+
+
+<div class="card">
+    <div class="card-body">
+        <form id="form-validation" asp-controller="AdminCategories" asp-action="Create" method="post" enctype="multipart/form-data">
+            <h4>Thêm danh mục</h4>
+            <hr />
+            <div class="form-group">
+                <div class="avatar-upload">
+                    <div class="avatar-edit">
+                       <input type="file" id="imageUpload" asp-for="Thumb" name="fThumb" accept=".png, .jpg, .jpeg" />
+                       <label for="imageUpload"></label>
+                    </div>
+                    <div class="avatar-preview">
+                        <div id="imagePreview" style="background-image: url('@Url.Content("~/images/category/default.png")');">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tên danh mục</label>
+                    @Html.TextBoxFor(m => m.CatName, new {@class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Title</label>
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Pulished</label>
+                <div class="switch m-r-10">
+                    <input type="checkbox" id="switch-1" checked="" asp-for="Published">
+                    <label for="switch-1"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Mô tả</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block">Thêm</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                Thumb: {
+                    required: true, 
+                },
+                CatName: {
+                    required: true,
+                    remote: "@Url.Action("CheckCatNameExists", "AdminCategories")"
+                },
+                Title: {
+                    required: true,
+                }
+            },
+            messages: {
+                Thumb: {
+                    required: "Vui lòng chọn ảnh cho danh mục",
+                },
+                CatName: {
+                    required: "Vui lòng nhập tên danh mục",
+                    remote: "Tên danh mục đã được sử dụng",
+                },
+                Title: {
+                    required: "Vui lòng nhập nội dung của trường này",
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model AzeShop.Models.Receipt
+
+@{
+    ViewData["Title"] = "Thông tin biên lai";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Chi tiết biên lai</h2>
+    <div class="header-sub-title">
+
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminReceipts" asp-action="Index" class="breadcrumb-item">Danh sách biên lai</a>
+            <span class="breadcrumb-item active">Chi tiết biên lai</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <div class="form-group">
+                            <div class="avatar-upload">
+                                <div class="avatar-edit">
+                                    <input type='file' id="imageUpload"  name="fThumb" accept=".png, .jpg, .jpeg" />
+                                </div>
+                                <div class="avatar-preview">
+                                    <div id="imagePreview" style="background-image: url('@Url.Content("~/images/products/"+Model.Product.Thumb)')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                    <tr>
+                        <td>Mã sản phẩm:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Product.ProductId</td>
+                    </tr>
+                    <tr>
+                        <td>Tên sản phẩm:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Product.ProductName</td>
+                    </tr>
+                    <tr>
+                        <td>Đơn giá nhập:</td>
+                        <td class="text-dark font-weight-semibold">@String.Format("{0:0,0}",Model.Price) VNĐ</td>
+                    </tr>
+                    <tr>
+                        <td>Số lượng nhập:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Amount</td>
+                    </tr>
+                    <tr>
+                        <td>Thành tiền:</td>
+                        <td class="text-dark font-weight-semibold">
+                            @String.Format("{0:0,0}",Model.Price*Model.Amount) VNĐ
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#Receipt').addClass('active');
+    </script>
+}

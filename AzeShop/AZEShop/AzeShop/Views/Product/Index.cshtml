@@ -1,0 +1,256 @@
+﻿@model Boolean
+
+@{
+    var alias = "";
+    List<Category> lsCat = ViewBag.CatList;
+    if (ViewBag.Alias == true)
+    {
+        ViewData["TiTle"] = "Tất cả sản phẩm";
+    }
+    else if (ViewBag.CurrentCat == null)
+        ViewData["TiTle"] = "Không tìm thấy trang";
+    else
+    {
+        Category category = ViewBag.CurrentCat;
+        ViewData["TiTle"] = category.Title;
+        alias = category.Alias.ToString();
+    }
+
+
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == true)
+{
+    <div class="u-s-p-y-90">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+                    <div class="shop-w-master">
+                        <h1 class="shop-w-master__heading u-s-m-b-30">
+                            <i class="fas fa-filter u-s-m-r-8"></i>
+
+                            <span>LỌC</span>
+                        </h1>
+                        <div class="shop-w-master__sidebar sidebar--bg-snow">
+
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">TỪ KHÓA</h1>
+
+                                    </div>
+                                    <div class="shop-w__wrap collapse show">
+                                        <div class="blog-search-form">
+
+                                            <label for="post-search"></label>
+
+                                            <input class="input-text input-text--primary-style" type="text" id="keyword" placeholder="Tìm kiếm" />
+
+                                            <button id="post-search" class="btn btn--icon fas fa-search" type="button"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">DANH MỤC</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle" data-target="#s-category" data-toggle="collapse"></span>
+                                    </div>
+                                    <div class="shop-w__wrap collapse show" id="s-category">
+                                        <ul class="shop-w__category-list gl-scroll">
+                                            <li>
+                                                <a href="/collections">Tất cả</a>
+                                            </li>
+                                            @foreach (var cat in lsCat)
+                                            {
+                                                <li>
+                                                    <a href="/collections/@cat.Alias">@cat.CatName</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">GIÁ</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
+                                    </div>
+
+                                    <br>
+                                    <div class="shop-w__wrap collapse show" id="s-price">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div id="slider-range"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row slider-labels">
+                                                <div class="col-xs-6 caption">
+                                                    <strong>Từ:</strong> <span id="slider-range-value1"></span>
+                                                </div>
+                                                <hr>
+                                                <div class="col-xs-6 caption">
+                                                    <strong>Đến:</strong> <span id="slider-range-value2"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <form>
+                                                        <input type="hidden" id="min-value" value="">
+                                                        <input type="hidden" id="max-value" value="">
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <a id="filter-by-price" class="s-option__link btn--e-brand-shadow">ÁP DỤNG</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12">
+                    <div class="shop-p">
+                        <div class="shop-p__toolbar u-s-m-b-30">
+
+                            <div class="shop-p__tool-style">
+                                <div class="tool-style__group u-s-m-b-8" id="show-option">
+
+                                    @*<span class="js-shop-grid-target is-active">Grid</span>
+
+                                <span class="js-shop-list-target">List</span>*@
+                                </div>
+                                <form>
+                                    <div class="tool-style__form-wrap">
+                                        <div class="u-s-m-b-8">
+                                            <select class="select-box select-box--transparent-b-2" id="list-pageSize-dropdown">
+                                                <option selected data-size="1">Hiển thị: 1</option>
+                                                <option data-size="2">Hiển thị: 2</option>
+                                                <option data-size="3">Hiển thị: 3</option>
+                                                <option data-size="18">Hiển thị: 18</option>
+                                            </select>
+                                        </div>
+                                        <div class="u-s-m-b-8">
+                                            <select class="select-box select-box--transparent-b-2" id="list-sort-dropdown">
+                                                <option id="sort-option-default" disabled selected>Sắp xếp theo</option>
+                                                <option data-sort="Price">
+                                                    Giá : Tăng dần
+                                                </option>
+                                                <option data-sort="Price_Desc">
+                                                    Giá : Giảm dần
+                                                </option>
+                                                <option data-sort="Name">
+                                                    Tên : A-Z
+                                                </option>
+                                                <option data-sort="Name_Desc">
+                                                    Tên : Z-A
+                                                </option>
+                                                <option data-sort="Newest">
+                                                    Mới nhất
+                                                </option>
+                                                <option data-sort="Oldest">
+                                                    Cũ nhất
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="shop-p__collection" id="product-list-partial">
+
+                            @*Hiển thị Partial View*@
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!--====== Section 1 ======-->
+    <div class="u-s-p-y-60">
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                        <div class="empty">
+                            <div class="empty__wrap">
+
+                                <span class="empty__big-text">XIN LỖI</span>
+
+                                <span class="empty__text-1">
+                                    Trang bạn đang tìm kiếm có thể đã bị xóa, chuyển đi, thay đổi link hoặc chưa bao giờ tồn tại.
+                                </span>
+
+                                <a class="empty__redirect-link btn--e-brand" href="/home">QUAY LẠI TRANG CHỦ</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 1 ======-->
+}
+
+
+
+@section Scripts
+    {
+    <script>
+        function loadProductList() {
+            var sortOrder = $('#list-sort-dropdown').find(":selected").data('sort');
+            var pageSize = $('#list-pageSize-dropdown').find(":selected").data('size');
+            var keyword = "";
+            if ($('#keyword') != null) {
+                keyword = $('#keyword').val();
+            }
+            var minPrice = $('#min-value').val();
+            var maxPrice = $('#max-value').val();
+            $("#product-list-partial").load("/Product/Shop?alias=" + '@alias' + "&sortOrder=" + sortOrder + "&pageSize=" + pageSize + "&searchString=" + keyword + "&minPrice=" + Number(minPrice) + "&maxPrice=" + Number(maxPrice), function (response, status, xhr) {
+                if (status == "success") {
+                }
+                if (status == "error")
+                    alert("Lỗi 2: " + xhr.status + ": " + xhr.status);
+            });
+        }
+
+        $(function () {
+            $(document).ready(function () { loadProductList() });
+            $('#list-sort-dropdown').on('change', function () { loadProductList() });
+            $('#list-pageSize-dropdown').on('change', function () { loadProductList() });
+            $('#post-search').on('click', function () { loadProductList() });
+            $('#filter-by-price').on('click', function () { loadProductList() });
+            $('#keyword').on('keypress', function (event) {
+                if (event.key === "Enter") {
+                    $('#post-search').click();
+                }
+
+            });
+        });
+    </script>
+    }
+
+
+

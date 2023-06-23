@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" prefHeight="795.0" prefWidth="1296.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HomeController">
+   <children>
+      <TableView fx:id="table" layoutX="3.0" layoutY="206.0" onMouseClicked="#onClickRow" prefHeight="315.0" prefWidth="1291.0">
+         <columns>
+            <TableColumn fx:id="codeCol" prefWidth="107.99996948242188" text=" Mã số" />
+            <TableColumn fx:id="nameCol" prefWidth="269.0" text="Họ tên" />
+            <TableColumn fx:id="sexCol" minWidth="0.0" prefWidth="99.0" text="Giới tính" />
+            <TableColumn fx:id="classCol" minWidth="0.0" prefWidth="115.0" text="Lớp" />
+            <TableColumn fx:id="birthdayCol" minWidth="0.0" prefWidth="162.0" text="Ngày sinh" />
+            <TableColumn fx:id="hometownCol" prefWidth="127.0" text="Quê quán" />
+            <TableColumn fx:id="phoneCol" prefWidth="135.0" text="Số điện thoại" />
+            <TableColumn fx:id="emailCol" prefWidth="277.0" text="Email" />
+         </columns>
+      </TableView>
+      <Pane layoutX="3.0" layoutY="95.0" prefHeight="5.0" prefWidth="1291.0" style="-fx-background-color: black;" />
+      <Text layoutX="35.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Students Details" wrappingWidth="464.90185546875">
+         <font>
+            <Font name="Bauhaus 93" size="61.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="photo" fitHeight="250.0" fitWidth="226.0" layoutX="55.0" layoutY="534.0" pickOnBounds="true" preserveRatio="true" />
+      <Text layoutX="378.0" layoutY="573.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã số">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="371.0" layoutY="633.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="codeTF" editable="false" layoutX="455.0" layoutY="550.0" prefHeight="31.0" prefWidth="280.0" />
+      <Text layoutX="803.0" layoutY="573.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="805.0" layoutY="633.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quê quán">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="859.0" layoutY="693.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SĐT">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="sexTF" editable="false" layoutX="455.0" layoutY="670.0" prefHeight="31.0" prefWidth="280.0" />
+      <TextField fx:id="classTF" editable="false" layoutX="455.0" layoutY="730.0" prefHeight="31.0" prefWidth="280.0" />
+      <TextField fx:id="hometownTF" editable="false" layoutX="920.0" layoutY="610.0" prefHeight="31.0" prefWidth="280.0" />
+      <TextField fx:id="phoneTF" editable="false" layoutX="920.0" layoutY="670.0" prefHeight="31.0" prefWidth="280.0" />
+      <TextField fx:id="emailTF" editable="false" layoutX="920.0" layoutY="730.0" prefHeight="31.0" prefWidth="280.0" />
+      <TextField fx:id="dateTF" editable="false" layoutX="920.0" layoutY="550.0" prefHeight="31.0" prefWidth="280.0" />
+      <Text layoutX="844.0" layoutY="752.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="nameTF" editable="false" layoutX="455.0" layoutY="610.0" prefHeight="31.0" prefWidth="280.0" />
+      <Text layoutX="354.0" layoutY="692.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="403.0" layoutY="753.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lớp">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Text>
+      <Button alignment="CENTER" layoutX="1251.0" layoutY="3.0" mnemonicParsing="false" onAction="#onClickClose" prefHeight="5.0" prefWidth="28.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <FontAwesomeIconView fill="RED" glyphName="CLOSE" size="35" wrappingWidth="22.571428298950195" />
+         </graphic>
+      </Button>
+      <Button alignment="CENTER" layoutX="25.0" layoutY="105.0" mnemonicParsing="false" onAction="#onClickAdd" prefHeight="82.0" prefWidth="94.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <FontAwesomeIconView fill="AQUA" glyphName="USER_PLUS" onMouseClicked="#onClickAdd" size="70" wrappingWidth="83.42857360839844" />
+         </graphic>
+      </Button>
+      <Button alignment="CENTER" layoutX="143.0" layoutY="112.0" mnemonicParsing="false" onAction="#onClickEdit" prefHeight="19.0" prefWidth="43.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <FontAwesomeIconView fill="#00ff55" glyphName="EDIT" size="70" wrappingWidth="73.0">
+               <rotationAxis>
+                  <Point3D />
+               </rotationAxis>
+            </FontAwesomeIconView>
+         </graphic>
+      </Button>
+      <Button layoutX="251.0" layoutY="105.0" mnemonicParsing="false" onAction="#onClickDelete" prefHeight="46.0" prefWidth="56.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <FontAwesomeIconView fill="RED" glyphName="TRASH_ALT" size="70" />
+         </graphic>
+      </Button>
+      <Text layoutX="434.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Text>
+      <TextField fx:id="keywordTF" layoutX="551.0" layoutY="134.0" prefHeight="14.0" prefWidth="616.0" promptText="Mã số">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Button alignment="CENTER" layoutX="1207.0" layoutY="6.0" mnemonicParsing="false" onAction="#onClickMinimize" prefHeight="28.0" prefWidth="34.0" style="-fx-background-color: transparent;" textFill="#80aaff">
+         <font>
+            <Font name="Berlin Sans FB" size="15.0" />
+         </font>
+         <graphic>
+            <FontAwesomeIconView fill="DIMGRAY" glyphName="MINUS" size="35" />
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

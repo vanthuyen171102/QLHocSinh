@@ -1,0 +1,458 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    List<Category> categories = ViewBag.Categories;
+    List<Product> products = ViewBag.Products;
+}
+
+
+
+<!--====== Primary Slider ======-->
+<div class="s-skeleton s-skeleton--h-600 s-skeleton--bg-grey">
+    <div class="owl-carousel primary-style-1" id="hero-slider">
+        <div class="hero-slide hero-slide--1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="slider-content slider-content--animation">
+
+                            <span class="content-span-1 u-c-secondary">Latest Update Stock</span>
+
+                            <span class="content-span-2 u-c-secondary">30% Off On Electronics</span>
+
+                            <span class="content-span-3 u-c-secondary">Find electronics on best prices, Also Discover most selling products of electronics</span>
+
+                            <span class="content-span-4 u-c-secondary">
+                                Starting At
+
+                                <span class="u-c-brand">$1050.00</span>
+                            </span>
+
+                            <a class="shop-now-link btn--e-brand" href="shop-side-version-2.html">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide hero-slide--2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="slider-content slider-content--animation">
+
+                            <span class="content-span-1 u-c-white">Find Top Brands</span>
+
+                            <span class="content-span-2 u-c-white">10% Off On Electronics</span>
+
+                            <span class="content-span-3 u-c-white">Find electronics on best prices, Also Discover most selling products of electronics</span>
+
+                            <span class="content-span-4 u-c-white">
+                                Starting At
+
+                                <span class="u-c-brand">$380.00</span>
+                            </span>
+
+                            <a class="shop-now-link btn--e-brand" href="shop-side-version-2.html">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide hero-slide--3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="slider-content slider-content--animation">
+
+                            <span class="content-span-1 u-c-secondary">Find Top Brands</span>
+
+                            <span class="content-span-2 u-c-secondary">10% Off On Electronics</span>
+
+                            <span class="content-span-3 u-c-secondary">Find electronics on best prices, Also Discover most selling products of electronics</span>
+
+                            <span class="content-span-4 u-c-secondary">
+                                Starting At
+
+                                <span class="u-c-brand">$550.00</span>
+                            </span>
+
+                            <a class="shop-now-link btn--e-brand" href="shop-side-version-2.html">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--====== End - Primary Slider ======-->
+<!--====== Section 2 ======-->
+<div class="u-s-p-b-60">
+
+    <!--====== Section Intro ======-->
+    <div class="section__intro u-s-m-b-16">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section__text-wrap">
+                        <h1 class="section__heading u-c-secondary u-s-m-b-12">BÁN CHẠY</h1>
+
+                        <span class="section__span u-c-silver">CHỌN DANH MỤC</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Section Intro ======-->
+    <!--====== Section Content ======-->
+    <div class="section__content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="filter-category-container">
+                        @if (categories != null && categories.Count > 0)
+                        {
+                            <div class="filter__category-wrapper">
+                                <button class="btn filter__btn filter__btn--style-1 js-checked" type="button" data-filter="*">Tất cả</button>
+                            </div>
+                            @foreach (var item in categories)
+                            {
+
+                                <div class="filter__category-wrapper">
+
+                                    <button class="btn filter__btn filter__btn--style-1" type="button" data-filter=".@item.Alias">@item.CatName</button>
+                                </div>
+                            }
+
+                        }
+                    </div>
+
+                    <div class="filter__grid-wrapper u-s-m-t-30">
+                        <div class="row">
+                            @if (products != null && products.Count > 0)
+                            {
+                                @foreach (var product in products)
+                                {
+                                    <!--====== Quick Look Modal ======-->
+                                    <div class="modal fade quick-look" id="quick-look-@product.ProductId">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content modal--shadow">
+
+                                                <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal"></button>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-5">
+
+                                                            <!--====== Product Breadcrumb ======-->
+                                                            <div class="pd-breadcrumb u-s-m-b-30">
+                                                                <ul class="pd-breadcrumb__list">
+                                                                    <li class="has-separator">
+
+                                                                        <a href="/home">Trang chủ</a>
+                                                                    </li>
+                                                                    <li class="is-marked">
+
+                                                                        <a href="/collections/@product.Cat.Alias">@product.Cat.CatName</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!--====== End - Product Breadcrumb ======-->
+                                                            <!--====== Product Detail ======-->
+                                                            <div class="pd u-s-m-b-30">
+                                                                <div class="pd-wrap">
+                                                                    <div id="js-product-detail-modal">
+                                                                        <div>
+                                                                            <img class="u-img-fluid" src="~/images/products/@product.Thumb" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <!--====== End - Product Detail ======-->
+                                                        </div>
+                                                        <div class="col-lg-7">
+
+                                                            <!--====== Product Right Side Details ======-->
+                                                            <div class="pd-detail">
+                                                                <div>
+
+                                                                    <span class="pd-detail__name">@product.ProductName</span>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="pd-detail__inline">
+
+
+                                                                        <span class="pd-detail__price" style="font-size: x-large">
+                                                                            @String.Format("{0:0,0}",(100-product.Discount)*product.Price/100) VNĐ
+                                                                        </span>
+                                                                        @if (product.Discount > 0)
+                                                                        {
+                                                                            <span class="pd-detail__discount">(GIẢM @product.Discount%)</span>
+
+                                                                            <del class="pd-detail__del" style="font-size: medium">
+                                                                                @String.Format("{0:0,0}",product.Price) VNĐ
+                                                                            </del>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div class="u-s-m-b-15">
+                                                                    <div class="pd-detail__rating gl-rating-style">
+                                                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+
+                                                                        <span class="pd-detail__review u-s-m-l-4">
+
+                                                                            <a href="product-detail.html">23 Reviews</a>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="u-s-m-b-15">
+                                                                    <div class="pd-detail__inline">
+
+                                                                        <span class="pd-detail__stock">Tồn kho: @product.UnitsInStock</span>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="u-s-m-b-15">
+                                                                    @if (product.Description != null)
+                                                                    {
+                                                                        <span class="pd-detail__preview-desc">@product.Description</span>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="pd-detail__preview-desc">Chưa có mô tả về sản phẩm này</span>
+
+                                                                    }
+                                                                </div>
+
+                                                                <div class="u-s-m-b-15">
+                                                                    <form class="pd-detail__form">
+                                                                        <div class="pd-detail-inline-2">
+                                                                            <div class="u-s-m-b-15">
+
+                                                                                <!--====== Input Counter ======-->
+                                                                                <div class="input-counter">
+
+                                                                                    <span class="input-counter__minus fas fa-minus"></span>
+
+                                                                                    <input class="input-counter__text input-counter--text-primary-style" id="@($"quantity-{product.ProductId}")" type="text" value="1" data-min="1" data-max="1000">
+
+                                                                                    <span class="input-counter__plus fas fa-plus"></span>
+                                                                                </div>
+                                                                                <!--====== End - Input Counter ======-->
+                                                                            </div>
+                                                                            <div class="u-s-m-b-15">
+
+                                                                                <button data-productid="@product.ProductId" class="btn btn--e-brand-b-2 item-addCart-with-quantity" type="submit">Thêm vào giỏ hàng</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="u-s-m-b-15">
+
+                                                                    <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                                                    <ul class="pd-detail__policy-list">
+                                                                        <li>
+                                                                            <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                                            <span>Buyer Protection.</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                                            <span>Full Refund if you don't receive your order.</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <i class="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                                            <span>Returns accepted if product not as described.</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <!--====== End - Product Right Side Details ======-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--====== End - Quick Look Modal ======-->
+                                    <!--====== Add to Cart Modal ======-->
+                                    <div class="modal fade" id="add-to-cart-@product.ProductId">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content modal-radius modal-shadow">
+
+                                                <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal"></button>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-12">
+                                                            <div class="success u-s-m-b-30">
+                                                                <div class="success__text-wrap">
+                                                                    <i class="fas fa-check"></i>
+
+                                                                    <span>Sản phẩm đã được thêm vào giỏ hàng!</span>
+                                                                </div>
+                                                                <div class="success__img-wrap">
+
+                                                                    <img class="u-img-fluid" src="~/images/products/@product.Thumb" alt="">
+                                                                </div>
+                                                                <div class="success__info-wrap">
+
+                                                                    <span class="success__name">@product.ProductName</span>
+
+
+                                                                    <span class="success__price">
+                                                                        @String.Format("{0:0,0}",(100-product.Discount)*product.Price/100) VNĐ
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12">
+                                                            <div class="s-option">
+
+                                                                <span class="s-option__text">1 item (s) in your cart</span>
+                                                                <div class="s-option__link-box">
+
+                                                                    <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">TIẾP TỤC MUA SẮM</a>
+
+                                                                    <a class="s-option__link btn--e-white-brand-shadow" href="/cart">ĐẾN GIỎ HÀNG</a>
+
+                                                                    <a class="s-option__link btn--e-brand-shadow" href="/checkout">THANH TOÁN</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--====== End - Add to Cart Modal ======-->
+                                    
+                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item @product.Cat.Alias">
+                                            <div class="product-o product-o--hover-on product-o--radius">
+                                                <div class="product-o__wrap">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="/product/@product.Alias-@product.ProductId">
+
+                                                        <img class="aspect__img" src="~/images/products/@product.Thumb" alt="">
+                                                    </a>
+                                                    <div class="product-o__action-wrap">
+                                                        <ul class="product-o__action-list">
+                                                            <li>
+                                                                <a data-modal="modal" data-modal-id="#quick-look-@product.ProductId" data-tooltip="tooltip" data-placement="top" title="Xem"><i class="fas fa-search-plus"></i></a>
+                                                            </li>
+                                                            <li>
+                                                                <a data-productid="@product.ProductId" title="Thêm vào giỏ hàng" class="item-addCart"><i class="fas fa-plus-circle"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <span class="product-o__category">
+
+                                                    <a href="/collections/@product.Cat.Alias">@product.Cat.CatName</a>
+                                                </span>
+
+                                                <span class="product-o__name">
+
+                                                    <a href="/products/@product.Alias-@product.ProductId">@product.ProductName</a>
+                                                </span>
+                                                <div class="product-o__rating gl-rating-style">
+                                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+
+                                                    <span class="product-o__review">(23)</span>
+                                                </div>
+
+                                                <span class="product-o__price">
+                                                    @String.Format("{0:0,0}",(100-product.Discount)*product.Price/100) VNĐ
+                                                    <span class="product-o__discount">
+                                                        @String.Format("{0:0,0}",product.Price) VNĐ
+
+                                                    </span>
+                                                </span>
+                                            </div>
+
+                                        </div>
+
+                                }
+
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="load-more">
+                        <div class="s-option">
+                            <a class="s-option__link btn--e-brand-shadow" href="/collections">XEM THÊM</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Section Content ======-->
+</div>
+<!--====== End - Section 2 ======-->
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.item-addCart').click(function () {
+                event.preventDefault();
+                var productid = $(this).attr("data-productid");
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "/addcart/" + productid,
+                    cache: false,
+                    async: true,
+                    success: function (response) {
+                        if (response.status == "success") {
+                            $("#add-to-cart-" + productid).modal('show');
+                            $("#cart-partial").load("/Home/LoadCartPartial", function (response, status, xhr) {
+                                if (status == "success") {
+
+                                }
+                                if (status == "error")
+                                    alert("Error: " + xhr.status + ": " + xhr.status);
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        alert("khong thanh c");
+                    }
+                });
+            });
+            $('.item-addCart-with-quantity').click(function () {
+                event.preventDefault();
+                var productid = $(this).attr("data-productid");
+                var quantity = $("#quantity-" + productid).val();
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "/addcart/" + productid + "." + quantity,
+                    cache: false,
+                    async: true,
+                    success: function (response) {
+                        if (response.status == "success") {
+                            $("#add-to-cart-" + productid).modal('show');
+                            $("#cart-partial").load("/Home/LoadCartPartial", function (response, status, xhr) {
+                                if (status == "success") {
+                                }
+                                if (status == "error")
+                                    alert("Error: " + xhr.status + ": " + xhr.status);
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        alert("khong thanh c");
+                    }
+                });
+            });
+            
+        });
+    </script>
+
+}

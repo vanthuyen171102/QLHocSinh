@@ -1,0 +1,417 @@
+﻿@model AzeShop.Models.Customer
+
+@{
+    List<Order> lsOrder = ViewBag.Orders;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tài khoản của tôi";
+}
+
+<!--====== App Content ======-->
+<!--====== Section 1 ======-->
+<div class="u-s-p-y-60">
+
+    <!--====== Section Content ======-->
+    <div class="section__content">
+        <div class="container">
+            <div class="breadcrumb">
+                <div class="breadcrumb">
+                    <div class="breadcrumb__wrap">
+                        <ul class="breadcrumb__list">
+                            <li class="has-separator">
+
+                                <a href="home">Trang chủ</a>
+                            </li>
+                            <li class="is-marked">
+                                <a href="account">Tài khoản của tôi</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--====== End - Section 1 ======-->
+<!--====== Section 2 ======-->
+<div class="u-s-p-b-60">
+
+    <!--====== Section Content ======-->
+    <div class="section__content">
+        <div class="dash">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-12">
+
+                        <!--====== Dashboard Features ======-->
+                        <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
+                            <div class="dash__pad-1">
+                                <span class="dash__text u-s-m-b-16">Xin chào, @Model.FullName</span>
+                                <ul class="dash__f-list nav " id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a id="dashboard-tab" class="nav-link active" data-toggle="tab" role="tab" href="#dashboard" aria-controls="dashboard" aria-selected="true">Tài khoản của tôi</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="profile-tab" class="nav-link" data-toggle="tab" role="tab" href="#profile" aria-controls="profile" aria-selected="false">Thông tin cá nhân</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="edit-profile-tab" class="nav-link" data-toggle="tab" role="tab" href="#edit-profile" aria-controls="edit-profile" aria-selected="false">Chỉnh sửa hồ sơ</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a id="change-password-tab" class="nav-link" data-toggle="tab" role="tab" href="#change-password" aria-controls="change-password" aria-selected="false">Đổi mật khẩu</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!--====== End - Dashboard Features ======-->
+                    </div>
+                    <div class=" col-lg-9 col-md-12">
+                        <div class="tab-content">
+                            <div id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30 tab-pane fade show active">
+                                <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                    <div class="dash__pad-2">
+                                        <h1 class="dash__h1 u-s-m-b-14">Quản lý tài khoản</h1>
+
+                                        <span class="dash__text u-s-m-b-30">
+                                            Từ Trang tổng quan tài khoản của tôi, bạn có thể xem ảnh chụp nhanh về hoạt động tài khoản gần đây của mình và cập nhật thông tin tài khoản của mình. Chọn một liên kết bên dưới để xem hoặc chỉnh sửa thông tin.
+                                        </span>
+                                        <div class="row">
+                                            <div class="col-lg-6 u-s-m-b-30">
+                                                <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                                                    <div class="dash__pad-3">
+                                                        <h2 class="dash__h2 u-s-m-b-8">THÔNG TIN CÁ NHÂN</h2>
+                                                        
+
+                                                        <span class="dash__text">@Model.FullName</span>
+
+                                                        <span class="dash__text">@Model.Email</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 u-s-m-b-30">
+                                                <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                                                    <div class="dash__pad-3">
+                                                        <h2 class="dash__h2 u-s-m-b-8">ĐỊA CHỈ</h2>
+
+                                                       
+
+                                                        <span class="dash__text">@Model.City.CityName</span>
+
+                                                        <span class="dash__text">@Model.Phone</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dash__box dash__box--shadow dash__box--bg-white dash__box--radius">
+                                    <h2 class="dash__h2 u-s-p-xy-20">LỊCH SỬ MUA HÀNG</h2>
+                                    <div class="dash__table-wrap gl-scroll">
+                                        <table class="dash__table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã hóa đơn</th>
+                                                    <th>Ngày đặt</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Trạng thái</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (lsOrder != null && lsOrder.Count() > 0)
+                                                {
+                                                    @foreach (var item in lsOrder)
+                                                    {
+                                                        <tr>
+                                                            <td><a class="account-order-id" href="javascript:void(0)">#@item.OrderId</a></td>
+                                                            <td>@item.OrderDate</td>
+                                                            <td>
+                                                                @String.Format("{0:0,0}",item.TotalMoney) VNĐ
+                                                            </td>
+                                                            <td>@item.TransactStatus.Status</td>
+                                                            <td>
+                                                                <a href="/MyOrder/@item.OrderId" target="_blank" class="xemdonhang" data-madonhang="@item.OrderId">Xem đơn hàng</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="5" rowspan="3">
+                                                            <h1>Chưa có đơn hàng!</h1>
+                                                        </td>
+                                                    </tr>
+                                                   
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="profile" role="tabpanel" aria-labelledby="profile-tab" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30 tab-pane fade">
+                                <div class="dash__pad-2">
+                                    <h1 class="dash__h1 u-s-m-b-14">Thông tin cá nhân</h1>
+
+                                    <span class="dash__text u-s-m-b-30">Xem tất cả thông tin của bạn, bạn có thể tùy chỉnh hồ sơ của mình.</span>
+                                    <div class="row">
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Họ và tên</h2>
+
+                                            <span class="dash__text">@Model.FullName</span>
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+
+                                            <span class="dash__text">@Model.Email</span>
+                                            <div class="dash__link dash__link--secondary">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Số điện thoại</h2>
+
+                                            <span class="dash__text">@Model.Phone</span>
+                                            <div class="dash__link dash__link--secondary">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Địa chỉ</h2>
+
+                                            <span class="dash__text">@Model.Address</span>
+                                        </div>
+                                        <div class="col-lg-4 u-s-m-b-30">
+                                            <h2 class="dash__h2 u-s-m-b-8">Tỉnh/Thành phố</h2>
+
+                                            <span class="dash__text">@Model.City.CityName</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="edit-profile" role="tabpanel" aria-labelledby="edit-profile-tab" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30 tab-pane fade">
+                                <div class="dash__pad-2">
+                                    <h1 class="dash__h1 u-s-m-b-14">Cập nhật thông tin</h1>
+
+                                    <span class="dash__text u-s-m-b-30">Cập nhật thông tin cá nhân</span>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <form id="form-validation" method="post" class="dash-edit-p" asp-action="EditProfile">
+                                                <input asp-for="CustomerId" type="hidden" />
+                                                <input asp-for="Active" type="hidden" />
+                                                <input asp-for="Password" type="hidden" />
+                                                <input asp-for="CustomerId" type="hidden" />
+                                                <input asp-for="Phone" type="hidden" />
+                                                <input asp-for="Email" type="hidden" />
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+
+                                                        <span class="dash__text">@Model.Email</span>
+                                                        <div class="dash__link dash__link--secondary">
+                                                        </div>
+                                                    </div>
+                                                    <div class="u-s-m-b-30">
+                                                        <h2 class="dash__h2 u-s-m-b-8">Số điện thoại</h2>
+
+                                                        <span class="dash__text">@Model.Phone</span>
+                                                        <div class="dash__link dash__link--secondary">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">HỌ VÀ TÊN *</label>
+                                                        @Html.TextBoxFor(m => m.FullName, new {placeholder = "Họ và tên",@class="input-text input-text--primary-style"})
+                                                    </div>
+                                                </div>
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">ĐỊA CHỈ *</label>
+                                                        @Html.TextBoxFor(m => m.Address, new {placeholder = "Địa chỉ",@class="input-text input-text--primary-style"})
+                                                    </div>
+                                                </div>
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">TỈNH/THÀNH PHỐ *</label>
+                                                        @Html.DropDownListFor(m => m.CityId,ViewBag.TinhThanh as SelectList,"Chọn tỉnh/thành phố",new { @class = "select-box select-box--primary-style u-w-100"})
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn--e-brand-b-2" type="submit">LƯU THAY ĐỔI</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="change-password" role="tabpanel" aria-labelledby="change-password-tab" class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30 tab-pane fade">
+                                <div class="dash__pad-2">
+                                    <h1 class="dash__h1 u-s-m-b-14">ĐỔI MẬT KHẨU</h1>
+
+                                    <span class="dash__text u-s-m-b-30">Thay đổi mật khẩu</span>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <form id="change-password-form" method="post" class="dash-edit-p" asp-action="ChangePassword">
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">MẬT KHẨU HIỆN TẠI *</label>
+                                                        @Html.PasswordFor(m => m.Password, new {placeholder = "Mật khẩu hiện tại",@class="input-text input-text--primary-style"})
+                                                    </div>
+                                                </div>
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">MẬT KHẨU MỚI *</label>
+                                                        <input type="password" id="NewPassword" name="NewPassword" placeholder="Mật khẩu mới" class="input-text input-text--primary-style" />
+                                                    </div>
+                                                </div>
+                                                <div class="gl-inline">
+                                                    <div class="u-s-m-b-30">
+                                                        <label class="gl-label" for="reg-fname">XÁC NHẬN MẬT KHẨU *</label>
+                                                        <input type="password" name="ConfirmPassword" placeholder="Xác nhận mật khẩu" class="input-text input-text--primary-style" />
+                                                    </div>
+                                                </div>
+                                                <span class="gl-text u-s-m-b-30" style="color:red">@ViewBag.Error</span>
+                                                <button class="btn btn--e-brand-b-2" type="submit">ĐỔI MẬT KHẨU</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Section Content ======-->
+    <!-- Begin Main Content Area -->
+    <!-- Main Content Area End Here -->
+    @section Scripts
+        {
+        <script src="~/assets/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="~/AdminAssets/vendors/jquery-validation/jquery.validate.min.js"></script>
+
+        <style>
+            div .is-invalid {
+                color: red;
+            }
+        </style>
+        <script>
+            jQuery.validator.addMethod('PhoneValidate', function (value, element) {
+                if (/^\d{3}-?\d{3}-?\d{4}$/g.test(value)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+            $("#form-validation").validate({
+                ignore: ':hidden:not(:checkbox)',
+                errorElement: 'label',
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                },
+                errorClass: 'is-invalid',
+                validClass: 'is-valid',
+                rules: {
+                    FullName: {
+                        required: true,
+                    },
+                    Email: {
+                        required: true,
+                        email: true,
+                        remote: "@Url.Action("CheckEmailUsed", "User")"
+                    },
+                    Phone: {
+                        required: true,
+                        PhoneValidate: true,
+                        remote: "@Url.Action("CheckPhoneUsed", "User")"
+
+                    },
+                    Password: {
+                        required: true,
+                        minlength: 8
+                    },
+                    ConfirmPassword: {
+                        required: true,
+                        equalTo: '#Password'
+                    },
+
+                    CityId: {
+                        required: true
+                    }
+                },
+                messages: {
+                    FullName: {
+                        required: "Vui lòng nhập họ tên",
+                    },
+                    Email: {
+                        required: "Vui lòng nhập địa chỉ Email",
+                        email: "Đây không phải định dạng Email",
+                        remote: "Địa chỉ Email đã được sử dụng"
+                    },
+                    Phone: {
+                        required: "Vui lòng nhập số điện thoại",
+                        PhoneValidate: "Định dạng số điện thoại không đúng",
+                        remote: "Số điện thoại đã được sử dụng"
+
+                    },
+                    Password: {
+                        required: "Vui lòng nhập mật khẩu",
+                        minlength: "Mật khẩu gồm ít nhất 8 kí tự"
+                    },
+                    ConfirmPassword: {
+                        required: "Vui lòng xác nhận mật khẩu",
+                        equalTo: 'Mật khẩu xác nhận không trùng khớp'
+                    },
+                    CityId: {
+                        required: "Vui lòng chọn tỉnh/thành phố"
+                    }
+                }
+            });
+        </script>
+        <script>
+            $("#change-password-form").validate({
+                ignore: ':hidden:not(:checkbox)',
+                errorElement: 'label',
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                },
+                errorClass: 'is-invalid',
+                validClass: 'is-valid',
+                rules: {
+                    Password: {
+                        required: true,
+                        remote: "@Url.Action("CheckPassword", "User")"
+                    },
+                    NewPassword: {
+                        required: true,
+                        minlength: 8
+                    },
+                    ConfirmPassword: {
+                        required: true,
+                        equalTo: '#NewPassword'
+                    },
+                },
+                messages: {
+                    Password: {
+                        required: "Vui lòng nhập mật khẩu",
+                        remote: "Mật khẩu không chính xác"
+                    },
+                    NewPassword: {
+                        required: "Vui lòng nhập mật khẩu mới",
+                        minlength: "Mật khẩu gồm ít nhất 8 kí tự"
+                    },
+                    ConfirmPassword: {
+                        required: "Vui lòng xác nhận mật khẩu",
+                        equalTo: 'Mật khẩu xác nhận không trùng khớp'
+                    },
+                }
+            });
+
+        </script>
+    }

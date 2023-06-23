@@ -1,0 +1,67 @@
+﻿@model AzeShop.Models.Account
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <h2 class="header-title">Thông tin tài khoản</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminAccounts" asp-action="Index" class="breadcrumb-item">Danh sách tài khoản</a>
+            <span class="breadcrumb-item active">Thông tin tài khoản</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-lg-4 text-left">
+                <a asp-action="Edit" asp-route-id="@Model.AccountId">
+                    <button class="btn btn-primary">
+                        <i class="anticon anticon-edit"></i>
+                        <span>Sửa</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.AccountId</td>
+                    </tr>
+                    <tr>
+                        <td>Tên tài khoản:</td>
+                        <td class="text-dark font-weight-semibold">@Model.AccountName</td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Password</td>
+                    </tr>
+                    <tr>
+                        <td>Tên quyền truy cập:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Role.RoleName</td>
+                    </tr>
+                    <tr>
+                        <td>Đăng nhập gần nhất:</td>
+                        <td class="text-dark font-weight-semibold">@Model.LastLogin</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày tạo:</td>
+                        <td class="text-dark font-weight-semibold">@Model.CreateDate</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#Account').addClass('active');
+    </script>
+}

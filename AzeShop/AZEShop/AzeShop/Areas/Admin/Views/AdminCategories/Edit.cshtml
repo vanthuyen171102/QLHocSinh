@@ -1,0 +1,135 @@
+﻿@model AzeShop.Models.Category
+
+@{
+    ViewData["Title"] = "Chỉnh sửa danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Chỉnh sửa thông tin</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminCategories" asp-action="Index" class="breadcrumb-item">Danh sách danh mục</a>
+            <span class="breadcrumb-item active">Chỉnh sửa thông tin</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form id="form-validation" asp-controller="AdminCategories" asp-action="Edit" asp-route-id="@Model.CatId" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CatId" />
+            <input type="hidden" asp-for="Thumb" />
+            <div class="form-group">
+                <div class="avatar-upload">
+                    <div class="avatar-edit">
+                        <input name="fThumb" type='file' id="imageUpload" accept=".png, .jpg, .jpeg" asp-for="Thumb" />
+                        <label for="imageUpload"></label>
+                    </div>
+                    <div class="avatar-preview">
+                        <div id="imagePreview" style="background-image: url('@Url.Content("~/images/category/"+@Model.Thumb)')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label  text-dark font-weight-semibold">Tên danh mục</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="CatName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label  text-dark font-weight-semibold">Tittle</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="Title">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label  text-dark font-weight-semibold">Alias</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="Alias">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label  text-dark font-weight-semibold">Pulished</label>
+                <div class="col-sm-2 switch m-r-10">
+                    <input type="checkbox" id="switch-1" asp-for="Published">
+                    <label for="switch-1"></label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label control-label  text-dark font-weight-semibold">Mô tả</label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control"})
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success btn-tone m-r-5">Lưu</button>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                Thumb: {
+                    required: true,
+                },
+                Alias: {
+                    required: true,
+                    remote: "@Url.Action("CheckAliasExists", "AdminCategories",new {id =@Model.CatId})"
+                },
+                CatName: {
+                    required: true,
+                    remote: "@Url.Action("CheckCatNameExists", "AdminCategories",new {id =@Model.CatId})"
+                },
+                Title: {
+                    required: true,
+                }
+            },
+            messages: {
+                Thumb: {
+                    required: "Vui lòng chọn ảnh cho danh mục",
+                },
+                Alias: {
+                    required: "Vui lòng nội dung của trường này",
+                    remote: "Bí danh này đã được sử dụng",
+                },
+                CatName: {
+                    required: "Vui lòng nhập tên danh mục",
+                    remote: "Tên danh mục đã được sử dụng",
+                },
+                Title: {
+                    required: "Vui lòng nhập nội dung của trường này",
+                }
+            }
+        });
+    </script>
+}

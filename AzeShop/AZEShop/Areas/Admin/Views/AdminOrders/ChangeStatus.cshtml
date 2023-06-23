@@ -1,0 +1,83 @@
+﻿@model AzeShop.Models.Order
+
+
+
+<div class="modal-body">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">THÔNG TIN ĐƠN HÀNG #@Model.OrderId</h4>
+            <div class="table-responsive">
+                <table class="product-info-table m-t-20">
+                    <tbody>
+                        <tr>
+                            <td>ID:</td>
+                            <td class="text-dark font-weight-semibold">#@Model.OrderId</td>
+                        </tr>
+                        <tr>
+                            <td>Ngày đặt hàng:</td>
+                            <td>@Convert.ToDateTime(Model.OrderDate).ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        <tr>
+                            <td>Khách hàng:</td>
+                            <td>@Model.FullName</td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại:</td>
+                            <td>@Model.Phone</td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ:</td>
+                            <td>@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng tiền:</td>
+                            <td>
+                                @String.Format("{0:0,0}",Model.TotalMoney) VNĐ
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ngày thanh toán:</td>
+                            <td>
+                                @if (Model.PaymentDate == null)
+                                {
+                                    <span>Chưa thanh toán</span>
+                                }
+                                else
+                                {
+                                    <span>Đã thanh toán - @Convert.ToDateTime(Model.PaymentDate).ToString("dd/MM/yyyy")</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <form asp-area="Admin" asp-controller="AdminOrders" asp-action="ChangeStatus" asp-route-id="@Model.OrderId" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="OrderId" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Chọn trạng thái đơn hàng</label>
+                            <select class="form-control" asp-for="TransactStatusId" asp-items="@ViewBag.TrangThai" required>
+                                <option value="0" disabled selected>---Chọn trạng thái đơn hàng---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-row">
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="anticon anticon-save"></i>
+                            <span>Lưu trạng thái</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

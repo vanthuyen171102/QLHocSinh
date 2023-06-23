@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/fontawesomefx-8.9.jar"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/hsqldb-2.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/jackcess-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/JAVA/Workspace/Thi_GK/lib/ucanaccess-5.0.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

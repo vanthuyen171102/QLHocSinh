@@ -1,0 +1,234 @@
+﻿@model IEnumerable<AzeShop.Models.Order>
+
+@{
+    ViewData["Title"] = "Danh sách hóa đơn";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách hóa đơn</h2>
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-action="Index" asp-controller="Home" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách hóa đơn</span>
+        </nav>
+    </div>
+
+</div>
+<div id="test" style="float:right">
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-affix m-v-10">
+                            <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                            <input id="mySearchBox" name="keyword" type="text" class="form-control" placeholder="Tìm kiếm hóa đơn">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-affix m-v-10">
+                            <select class="custom-select" id="statusFilter" name="statusFilter" style="min-width: 150px;" asp-items="ViewBag.Status">
+                                <option class="text-center" disabled selected>----Tình trạng đơn hàng----</option>
+                                <option selected="selected" value="">Tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-lg-4 text-right m-v-10">
+                    <button id="export-button" class="btn btn-primary">
+                    <i class="anticon anticon-file-excel m-r-5"></i>
+                    <span>Export</span>
+                    </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="table-responsive">
+            <table id="data-table" class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Khách hàng</th>
+                        <th>Thành tiền</th>
+                        <th>Ngày đặt</th>
+                        <th>Trạng thái</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>#@item.OrderId</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-image" style="height: 70px; width: 70px;">
+                                            <img src="~/images//customers/@item.Customer.Avatar" alt="">
+                                        </div>
+                                        <h6 class="m-b-0 m-l-10">@item.Customer.FullName</h6>
+                                    </div>
+                                </td>
+                                <td>@String.Format("{0:0,0}",item.TotalMoney) VNĐ</td>
+                                <td>
+                                    @Convert.ToDateTime(item.OrderDate).ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @switch (item.TransactStatusId)
+                                    {
+                                        case 1:
+                                            <span style="width:100px" class="badge badge-pill badge-info">@item.TransactStatus.Status</span>
+                                            break;
+                                        case 2:
+                                            <span style="width:100px" class="badge badge-pill badge-primary">@item.TransactStatus.Status</span>
+                                            break;
+                                        case 3:
+                                            <span style="width:100px" class="badge badge-pill badge-secondary">@item.TransactStatus.Status</span>
+                                            break;
+                                        case 4:
+                                            <span style="width:100px" class="badge badge-pill badge-warning">@item.TransactStatus.Status</span>
+                                            break;
+                                        case 5:
+                                            <span style="width:100px" class="badge badge-pill badge-success">@item.TransactStatus.Status</span>
+                                            break;
+                                        case 6:
+                                            <span style="width:100px" class="badge badge-pill badge-danger">@item.TransactStatus.Status</span>
+                                            break;
+                                        default:
+                                            <span style="width:100px" class="badge badge-default">Không xác định</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-info btn-tone m-r-5" asp-area="Admin" asp-controller="AdminOrders" asp-action="Details" asp-route-id="@item.OrderId">Xem</a>
+                                    @if (item.TransactStatusId != 5 && item.TransactStatusId != 6)
+                                    {
+                                        <a data-target="#modal-header" data-toggle="modal" class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminOrders" asp-action="ChangeStatus" asp-route-id="@item.OrderId">Cập nhật trạng thái</a>
+
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div id="modal-header" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $('#Order').addClass('active');
+    </script>
+    
+   
+    <script>
+        $("document").ready(function () {
+
+
+            $("#data-table").dataTable({
+                //"columnDefs": [
+                //    { "searchable": false, "orderable": false, "targets": [5] }
+                //],
+
+
+                destroy: true,
+                stateSave: true,
+                bFilter: false,
+                searching: true,
+                "sDom": "ltipr",
+                "bLengthChange": false,
+                //"pageLength": 5
+
+            });
+            
+            
+            $('#mySearchBox').on('keyup', function () {
+                $('#data-table').DataTable().search(this.value).draw();
+            });
+            var table = $('#data-table').DataTable();
+
+            //Take the status filter drop down and append it to the datatables_filter div.
+            //You can use this same idea to move the filter anywhere withing the datatable that you want.
+            $("#data-table_filter.dataTables_filter").append($("#statusFilter"));
+
+            //Get the column index for the status column to be used in the method below ($.fn.dataTable.ext.search.push)
+            //This tells datatables what column to filter on when a user selects a value from the dropdown.
+            //It's important that the text used here (status) is the same for used in the header of the column to filter
+            var statusIndex = 4;
+            $("#data-table th").each(function (i) {
+                if ($($(this)).html() == "status") {
+                    statusIndex = i; return false;
+                }
+            });
+
+            //Use the built in datatables API to filter the existing rows by the status column
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var selectedItem = $('#statusFilter').val()
+                    var status = data[statusIndex];
+                    if (selectedItem === "" || status.includes(selectedItem)) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            //Set the change event for the status Filter dropdown to redraw the datatable each time
+            //a user selects a new filter.
+            $("#statusFilter").change(function (e) {
+                table.draw();
+            });
+            table.draw();
+        });
+
+    </script>
+
+
+    <script>
+        $('#modal-header').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var url = button.attr("href");
+            var modal = $(this);
+            // note that this will replace the content of modal-content ever time the modal is opened
+            modal.find('.modal-content').load(url);
+        });
+    </script>
+
+        <script>
+    $("#export-button").click(function () {
+    html_table_to_excel('xlsx');
+    });
+    function html_table_to_excel(type) {
+
+
+
+    var data = document.getElementById('data-table');
+
+    var file = XLSX.utils.table_to_book(data, { sheet: "sheet1" });
+
+    XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+    XLSX.writeFile(file, 'file.' + type);
+    }
+    </script>
+    
+    }

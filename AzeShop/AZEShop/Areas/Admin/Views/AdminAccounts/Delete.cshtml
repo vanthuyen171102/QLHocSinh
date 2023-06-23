@@ -1,0 +1,88 @@
+﻿@model AzeShop.Models.Account
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Thông tin tài khoản</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminAccounts" asp-action="Index" class="breadcrumb-item">Danh sách tài khoản</a>
+            <span class="breadcrumb-item active">Thông tin tài khoản</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.AccountId</td>
+                    </tr>
+                    <tr>
+                        <td>Tên tài khoản:</td>
+                        <td class="text-dark font-weight-semibold">@Model.AccountName</td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Password</td>
+                    </tr>
+                    <tr>
+                        <td>Tên quyền truy cập:</td>
+                        <td class="text-dark font-weight-semibold">@Model.Role.RoleName</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Đăng nhập gần nhất:</td>
+                        <td class="text-dark font-weight-semibold">@Model.LastLogin</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày tạo:</td>
+                        <td class="text-dark font-weight-semibold">@Model.CreateDate</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                <span>Xóa</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="confirmModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Xóa tài khoản</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn chắc chắn muốn xóa tài khoản này ?
+                                </div>
+                                <div class="modal-footer">
+                                    <form asp-action="Delete">
+                                        <button type="submit" class="btn btn-success btn-tone m-r-5">Xác nhận</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#Account').addClass('active');
+    </script>
+}

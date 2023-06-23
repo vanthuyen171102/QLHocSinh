@@ -1,0 +1,250 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString(AzeShop.Controllers.CartController.CARTKEY);
+    List<AzeShop.ModelViews.CartItem> lsItem = null;
+    if (jsoncart != null)
+    {
+        lsItem = JsonConvert.DeserializeObject<List<AzeShop.ModelViews.CartItem>>(jsoncart);
+    }
+}
+<!--====== App Content ======-->
+
+    <!--====== Section 1 ======-->
+    <div class="u-s-p-y-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="breadcrumb">
+                    <div class="breadcrumb__wrap">
+                        <ul class="breadcrumb__list">
+                            <li class="has-separator">
+
+                                <a href="home">Trang chủ</a>
+                            </li>
+                            <li class="is-marked">
+
+                                <a href="cart">Giỏ hàng</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if(lsItem!=null && lsItem.Count()>0)
+    {
+    <!--====== End - Section 1 ======-->
+    <!--====== Section 2 ======-->
+    <div class="u-s-p-b-60">
+
+        <!--====== Section Intro ======-->
+        <div class="section__intro u-s-m-b-60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section__text-wrap">
+                            <h1 class="section__heading u-c-secondary">GIỎ HÀNG</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Intro ======-->
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
+                        <div class="table-responsive">
+                            <table class="table-p">
+                                <tbody>
+                                    @foreach (var item in lsItem)
+                                    {
+                                        <!--====== Row ======-->
+                                        <tr>
+                                            <td>
+                                                <div class="table-p__box">
+                                                    <div class="table-p__img-wrap">
+
+                                                        <img class="u-img-fluid" src="~/images/products/@item.product.Thumb" alt="">
+                                                    </div>
+                                                    <div class="table-p__info">
+
+                                                        <span class="table-p__name">
+                                                            <a href="/products/@item.product.Alias-@item.product.ProductId">@item.product.ProductName</a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <span class="table-p__price">
+                                                    @String.Format("{0:0,0}",(100-item.product.Discount)*item.product.Price/100) VNĐ
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="table-p__input-counter-wrap">
+
+                                                    <!--====== Input Counter ======-->
+                                                    <div class="input-counter">
+
+                                                        <span class="input-counter__minus fas fa-minus"></span>
+
+                                                        <input class="input-counter__text input-counter--text-primary-style" type="number" data-min="1" data-max="1000" asp-for="@item.quantity" id="@($"quantity-{item.product.ProductId}")">
+
+                                                        <span class="input-counter__plus fas fa-plus"></span>
+                                                    </div>
+                                                    <!--====== End - Input Counter ======-->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="table-p__del-wrap">
+                                                    <a class="item-updateCart" data-productid="@item.product.ProductId">
+                                                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a class="far fa-trash-alt table-p__delete-link item-removeCart" data-productid="@item.product.ProductId"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!--====== End - Row ======-->
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 2 ======-->
+    <!--====== Section 3 ======-->
+    <div class="u-s-p-b-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
+                        <form class="f-cart">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-6 u-s-m-b-30">
+                                    <div class="f-cart__pad-box">
+                                        <div class="u-s-m-b-30">
+                                            <table class="f-cart__table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>TỔNG TIỀN</td>
+                                                        <td>@String.Format("{0:0,0}",lsItem.Sum(x => x.product.Price * x.quantity)) VNĐ</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>ĐƯỢC GIẢM</td>
+                                                        <td>@String.Format("{0:0,0}",lsItem.Sum(x => (x.product.Discount) * (x.product.Price * x.quantity)/100)) VNĐ</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>THÀNH TIỀN</td>
+                                                        <td>@String.Format("{0:0,0}",lsItem.Sum(x => (100-x.product.Discount) * (x.product.Price * x.quantity)/100)) VNĐ</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn--e-brand-b-2" asp-route="checkout">THANH TOÁN</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    <!--====== End - Section 3 ======-->
+    }
+    else
+    {
+    <div class="u-s-p-y-60">
+
+        <!--====== Section Content ======-->
+        <div class="section__content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                        <div class="empty">
+                            <div class="empty__wrap">
+
+                                <span class="empty__big-text">GIỎ HÀNG TRỐNG</span>
+
+                                <span class="empty__text-1">Không có sản phẩm nào trong giỏ hàng.</span>
+
+                                <a class="empty__redirect-link btn--e-brand" href="home">QUAY LẠI TRANG CHỦ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====== End - Section Content ======-->
+    </div>
+    }
+    
+
+    <script>
+    $(".item-updateCart").click(function (event) {
+        event.preventDefault();
+        var productid = $(this).attr("data-productid");
+        var quantity = $("#quantity-" + productid).val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.RouteUrl("updatecart")",
+            cache: false,
+            async: true,
+            data: {
+                productid: productid,
+                quantity: quantity
+            },
+            success: function (result) {
+                window.location.href = "@Url.RouteUrl("cart")";
+            }
+        });
+    });
+    $('.item-removeCart').on('click', function () {
+        event.preventDefault();
+        var productid = $(this).attr("data-productid");
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            url: "/removecart/" + productid,
+            cache: false,
+            async: true,
+            success: function (data) {
+                $("#cart-partial").load("Home/LoadCartPartial", function (response, status, xhr) {
+                    if (status == "success") {
+                    }
+                    if (status == "error")
+                        alert("Lỗi: " + xhr.status + ": " + xhr.status);
+                });
+                $("#app-content").load("/Cart/LoadCart", function (response, status, xhr) {
+                    if (status == "success") {
+                    }
+                    if (status == "error")
+                        alert("Lỗi 2: " + xhr.status + ": " + xhr.status);
+                });
+            },
+            error: function (data) {
+                alert("khong thanh cong");
+            }
+        });
+    });
+    </script>

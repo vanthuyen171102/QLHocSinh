@@ -1,0 +1,232 @@
+﻿@model AzeShop.Models.Product
+
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <h2 class="header-title">Cập nhật sản phẩm</h2>
+    <div class="header-sub-title">
+
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index" class="breadcrumb-item">Danh sách sản phẩm</a>
+            <span class="breadcrumb-item active">Cập nhật sản phẩm</span>
+        </nav>
+    </div>
+</div>
+
+
+<form id="form-validation" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@Model.ProductId" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="Thumb" />
+    <input type="hidden" asp-for="DateCreated" />
+    <div class="page-header no-gutters has-tab">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#product-edit-info">Chi tiết</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-edit-seo">SEO</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-edit-description">Mô tả</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content m-t-15">
+        <div class="tab-pane fade show active" id="product-edit-info">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input name="fThumb" type='file' id="imageUpload" accept=".png, .jpg, .jpeg" asp-for="Thumb" />
+                                <label for="imageUpload"></label>
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview" style="background-image: url('@Url.Content("~/images/products/"+@Model.Thumb)')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Tên sản phẩm</label>
+                        @Html.TextBoxFor(m => m.ProductName, new {@class = "form-control" })
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productPrice">Giá bán</label>
+                            @Html.TextBoxFor(m => m.Price, new {@class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productPrice">Giảm giá</label>
+                            @Html.TextBoxFor(m => m.Discount, new {@class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label class="font-weight-semibold" for="CatId">Danh mục sản phẩm</label>
+                            @Html.DropDownListFor(m => m.CatId,ViewBag.DanhMuc as SelectList,"--Chọn danh mục sản phẩm--",new { @class = "custom-select"})
+                        </div>
+                        <div class="form-group col-6">
+                            <label class="font-weight-semibold" for="productName">Hàng tồn kho</label>
+                            @Html.TextBoxFor(m => m.UnitsInStock, new {@class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="m-t-25">
+                            <div class="form-group d-flex align-items-center">
+                                <div class="switch m-r-10">
+                                    <input type="checkbox" asp-for="Active">
+                                    <label for="Active"></label>
+                                </div>
+                                <label>Public</label>
+                            </div>
+                            <div class="form-group d-flex align-items-center">
+                                <div class="switch m-r-10">
+                                    <input type="checkbox" asp-for="HomeFlag">
+                                    <label for="HomeFlag"></label>
+                                </div>
+                                <label>HomeFlag</label>
+                            </div>
+                            <div class="form-group d-flex align-items-center">
+                                <div class="switch m-r-10">
+                                    <input type="checkbox" asp-for="BestSeller">
+                                    <label for="BestSeller"></label>
+                                </div>
+                                <label>BestSeller</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="product-edit-seo">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productSize">Title</label>
+                        @Html.TextBoxFor(m => m.Title, new {@class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productColors">MetaDesc</label>
+                        <input type="text" class="form-control" asp-for="MetaDesc">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productFit">MetaKey</label>
+                        <input type="text" class="form-control" asp-for="MetaKey">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productFit">Tags</label>
+                        <input type="text" class="form-control" asp-for="Tags">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="product-edit-description">
+            <div class="card">
+                <div class="card-body">
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="anticon anticon-save"></i>
+                    <span>Cập nhật sản phẩm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $('#Product').addClass('active');
+    </script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+
+    <script>
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                Thumb: {
+                    required: true,
+                },
+                ProductName: {
+                    required: true,
+                },
+                Price: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                },
+                Discount: {
+                    number: true,
+                    range: [0, 100],
+                },
+                CatId: {
+                    required: true,
+                },
+                UnitsInStock: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                }
+            },
+            messages: {
+                Thumb: {
+                    required: "Vui lòng chọn ảnh",
+                },
+                ProductName: {
+                    required: "Vui lòng nhập tên sản phẩm",
+                },
+                Price: {
+                    required: "Vui lòng nhập giá bán của sản phẩm",
+                    number: "Giá trị đã nhập không hợp lệ",
+                    min: "Giá bán không hợp lệ",
+                },
+                Discount: {
+                    number: "Giá trị đã nhập không hợp lệ",
+                    range: "Giá trị đã nhập không phù hợp",
+                },
+                CatId: {
+                    required: "Vui lòng chọn danh mục sản phẩm",
+                },
+                UnitsInStock: {
+                    required: "Vui lòng nhập số lượng tồn kho",
+                    number: "Giá trị đã nhập không hợp lệ",
+                    min: "Số lượng tồn kho không phù hợp",
+                }
+            }
+        });
+    </script>
+
+}

@@ -1,0 +1,109 @@
+﻿@model AzeShop.Models.Receipt
+
+@{
+    ViewData["Title"] = "Sửa thông tin biên lai";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Sửa biên lai</h2>
+    <div class="header-sub-title">
+
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminReceipts" asp-action="Index" class="breadcrumb-item">Danh sách biên lai</a>
+            <span class="breadcrumb-item active">Sửa biên lai</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="m-t-15">
+            <form id="form-validation" asp-action="Edit" asp-area="Admin" asp-controller="AdminReceipts" asp-route-id="@Model.ReceiptId">
+                <input type="hidden" asp-for="ReceiptId" />
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="productName">Sản phẩm</label>
+                    @Html.DropDownListFor(m => m.ProductId,ViewBag.SanPham as SelectList,"--Chọn sản phẩm--",new { @class = "custom-select"})
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-semibold" for="productPrice">Đơn giá nhập</label>
+                        @Html.TextBoxFor(m => m.Price, new {@class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-semibold" for="productPrice">Số lượng</label>
+                        @Html.TextBoxFor(m => m.Amount, new {@class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ngày nhập</label>
+                    <div class="input-affix m-b-10">
+                        <i class="prefix-icon anticon anticon-calendar"></i>
+                        <input type="text" asp-for="DateCreated" class="form-control datepicker-input" placeholder="Chọn ngày nhập">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="anticon anticon-plus"></i>
+                        <span>Cập nhật biên lai</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts
+    {
+    
+    <script>
+        $('.datepicker-input').datepicker({
+            dateFormat: 'dd/mm/yy',
+        });
+        $('#Receipt').addClass('active');
+    </script>
+    <script>
+        $("#form-validation").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                ProductId: {
+                    required: true,
+                },
+                Price: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                },
+                Amount: {
+                    required: true,
+                    number: true,
+                    min: 0,
+
+                },
+            },
+            messages: {
+                ProductId: {
+                    required: "Vui lòng chọn tên sản phẩm",
+                },
+                Price: {
+                    required: "Vui lòng điền giá nhập",
+                    number: "Giá trị đã nhập không hợp lệ",
+                    min: "Giá nhập không hợp lệ",
+                },
+                Amount: {
+                    required: "Vui lòng điền số lượng nhập",
+                    number: "Giá trị đã nhập không hợp lệ",
+                    range: "Giá trị đã nhập không phù hợp",
+                    min: "Giá nhập không hợp lệ",
+                },
+
+            }
+        });
+    </script>
+}

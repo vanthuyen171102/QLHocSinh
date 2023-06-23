@@ -1,0 +1,151 @@
+﻿@model AzeShop.Models.Order
+
+@{
+    ViewData["Title"] = "Thông tin đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    List<OrderDetail> orderDetailsList = ViewBag.OrderDetailsList;
+
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div id="invoice" class="p-h-30">
+                <div class="m-t-15 lh-2">
+                    <div class="inline-block">
+                        <img class="img-fluid" src="~/AdminAssets/images/logo/logo.png" alt="">
+                        <address class="p-l-10">
+                            <span class="font-weight-semibold text-dark">AzeShop, Inc.</span><br>
+                            <span>Hà Nội</span><br>
+                            <span>Ký túc xá B HVNN Việt Nam, Trâu Quỳ</span><br>
+                            <span title="Phone">SĐT:</span>
+                            <span>(+98) 986-354108</span>
+                        </address>
+                    </div>
+                    <div class="float-right">
+                        <h2>HÓA ĐƠN</h2>
+                    </div>
+                </div>
+                <div class="row m-t-20 lh-2">
+                    <div class="col-sm-9">
+                        <h3 class="p-l-10 m-t-10">Gửi đến:</h3>
+                        <address class="p-l-10 m-t-10">
+                            <span>@Model.Customer.FullName - @Model.Customer.Phone</span><br>
+                            <span>@Model.Address, @Model.Ward.WardName, @Model.Ward.District.DistrictName, @Model.Ward.District.City.CityName</span>
+                        </address>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="m-t-80">
+                            <div class="text-dark text-uppercase d-inline-block">
+                                <span class="font-weight-semibold text-dark">Mã hóa đơn :</span>
+                            </div>
+                            <div class="float-right">#@Model.OrderId</div>
+                        </div>
+                        <div class="text-dark text-uppercase d-inline-block">
+                            <span class="font-weight-semibold text-dark">Ngày đặt :</span>
+                        </div>
+
+                        <div class="float-right">@Convert.ToDateTime(Model.OrderDate).ToString("dd/MM/yyyy")</div>
+
+                    </div>
+                </div>
+                <div class="m-t-20">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá bán</th>
+                                    <th>Giảm giá</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (orderDetailsList != null && orderDetailsList.Count() > 0)
+                                {
+                                    int i = 1;
+                                    foreach (var item in orderDetailsList)
+                                    {
+                                        <tr>
+                                            <th>@i</th>
+                                            <td><a target="_blank" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">@item.Product.ProductName</a></td>
+                                            <td>@item.Amount</td>
+                                            <td>
+                                                @String.Format("{0:0,0}",item.Price) VNĐ
+                                            </td>
+                                            <td>@item.Discount%</td>
+                                            <td>@String.Format("{0:0,0}",((100-item.Discount)*(item.Price * item.Amount)/100)) VNĐ</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row m-t-30 lh-1-8">
+                        <div class="col-sm-12">
+                            <div class="float-right text-right">
+                                <p>
+                                    Tiền hàng :
+                                    @String.Format("{0:0,0}",@orderDetailsList.Sum(x =>x.Price * x.Amount))VNĐ
+
+                                </p>
+                                <p>
+                                    Được giảm :
+                                    @String.Format("{0:0,0}",@orderDetailsList.Sum(x =>(x.Discount * x.Price * x.Amount)/100))VNĐ
+
+                                </p>
+                                <p>Tiền Ship : @Model.Ward.District.City.DeliveryPrice.ToString("#,##0") VNĐ</p>
+                                <hr>
+                                <h3>
+                                    <span class="font-weight-semibold text-dark">
+                                        Tổng tiền : @String.Format("{0:0,0}",@orderDetailsList.Sum(x =>(100-x.Discount)*(x.Price * x.Amount)/100)+Model.Ward.District.City.DeliveryPrice) VNĐ
+                                    </span>
+                                </h3>
+                                <div class="text-dark text-uppercase d-inline-block">
+                                    @if (Model.PaymentDate != null)
+                                    {
+                                        <span style="font-size:small">
+                                            Đã thanh toán : @Convert.ToDateTime(Model.PaymentDate).ToString("dd/MM/yyyy")
+                                        </span>
+                                    }
+                                    else
+                                    {
+
+                                        <span style="font-size:small">    Chưa thanh toán</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-t-30 lh-2">
+                        <div class="col-sm-12">
+                            <div class="border-bottom p-v-20">
+                                <p class="text-opacity"><small>@Model.Note</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-v-20">
+                        <div class="col-sm-6">
+                            <img class="img-fluid text-opacity m-t-5" width="100" src="assets/images/logo/logo.png" alt="">
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <small><span class="font-weight-semibold text-dark">SĐT:</span>(+98) 986-354108</small>
+                            <br>
+                            <small>support@themenate.com</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $('#Order').addClass('active');
+    </script>
+}
